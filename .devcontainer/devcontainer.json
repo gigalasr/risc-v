@@ -1,0 +1,37 @@
+{
+    "name": "GHDL",
+    "build": {
+      "dockerfile": "Dockerfile",
+      "args": {
+        "REMOTE_USER": "${localEnv:USER}",
+        "REMOTE_UID": "${localEnv:REMOTE_UID:1000}",
+        "REMOTE_GID": "${localEnv:REMOTE_GID:1000}"
+      }
+    },
+    "remoteUser": "${localEnv:USER}",
+    "privileged": true,
+    "mounts": [
+      {"source": "/etc/group", "target": "/etc/host-group", "type": "bind"},
+      {"source": "/dev", "target": "/dev", "type": "bind"},
+      {"source": "/tmp/.X11-unix", "target": "/tmp/.X11-unix", "type": "bind"},
+      {"source": "/dev/dri", "target": "/dev/dri", "type": "bind"}
+    ],
+    "postAttachCommand": "grep -qF 'TAG' $HOME/.bashrc || echo 'PATH=$PATH:/workspaces/ra/tools/vhdlmake/build # TAG' >> $HOME/.bashrc",
+    "customizations": {
+        "vscode": {
+          "extensions": [
+            "g0t00.vhdl-linter",
+            "redhat.vscode-yaml",
+            "ms-vscode.cmake-tools",
+            "ms-vscode.cpptools-extension-pack"
+          ]
+        }
+      },
+      "containerEnv": {
+        "DISPLAY": "unix:0"
+      },
+      "runArgs": [
+        "-e", "DISPLAY=${env:DISPLAY}"
+      ],
+      "initializeCommand": "xhost +si:localuser:${localEnv:USER}"
+  }

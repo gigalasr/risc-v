@@ -1,0 +1,3 @@
+[submodule "tools/vhdlmake"]
+	path = tools/vhdlmake
+	url = https://github.com/gigalasr/vhdlmake.git

@@ -1,0 +1,9 @@
+FROM ghdl/ext
+ARG REMOTE_USER
+ARG REMOTE_UID
+ARG REMOTE_GID
+RUN apt update -y && apt install -y grep nano git sudo build-essential cmake
+RUN groupadd --gid $REMOTE_GID $REMOTE_USER && \
+    useradd --uid $REMOTE_UID --gid $REMOTE_GID -m $REMOTE_USER -s /bin/bash && \
+    echo $REMOTE_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$REMOTE_USER && \
+    chmod 0440 /etc/sudoers.d/$REMOTE_USER 
