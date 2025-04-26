@@ -4,7 +4,7 @@ ARG REMOTE_USER
 ARG REMOTE_UID
 ARG REMOTE_GID
 
-RUN apt-get update -y && apt-get install -y grep nano git sudo build-essential cmake ghdl-mcode gtkwave gdb
+RUN apt-get update -y && apt-get install -y grep nano git sudo build-essential cmake ghdl-mcode gtkwave gdb zip
 
 RUN groupadd --gid $REMOTE_GID $REMOTE_USER && \
     useradd --uid $REMOTE_UID --gid $REMOTE_GID -m $REMOTE_USER -s /bin/bash && \
