@@ -37,25 +37,21 @@ begin
   s_shift_type <= pi_alu_op(G_OP_WIDTH - 1);
   s_carry_in <= pi_alu_op(G_OP_WIDTH - 1);
   po_carry_out <= s_carry_out;
+  
+  with s_alu_op select
+    s_shift_direction <= 
+      '1' when SRL_ALU_OP,
+      '0' when others;
 
-  process(s_op1, s_op2, s_alu_op, s_shift_type, s_shift_direction, s_res_add, s_res_shift) begin 
-    case s_alu_op is
-      when AND_ALU_OP => po_alu_out <= s_res_and;
-      when XOR_ALU_OP => po_alu_out <= s_res_xor;
-      when OR_ALU_OP => po_alu_out <= s_res_or;
-
-      when SLL_ALU_OP => 
-        s_shift_direction <= '0';
-        po_alu_out <= s_res_shift;
-      when SRL_ALU_OP =>         
-        s_shift_direction <= '1';
-        po_alu_out <= s_res_shift;
-      when SRA_ALU_OP => po_alu_out <= s_res_shift;
-
-      when ADD_ALU_OP => po_alu_out <= s_res_add;
-      when SUB_ALU_OP => po_alu_out <= s_res_add;
-
-      when others =>
-    end case;
-  end process;
+  with s_alu_op select
+    po_alu_out <= 
+      s_res_and when AND_ALU_OP,
+      s_res_xor when XOR_ALU_OP,
+      s_res_or when OR_ALU_OP,
+      s_res_shift when SLL_ALU_OP,
+      s_res_shift when SRL_ALU_OP,
+      s_res_shift when SRA_ALU_OP,
+      s_res_add when ADD_ALU_OP,
+      s_res_add when SUB_ALU_OP,
+      (others => '0') when others;
 end architecture behavior;
