@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
-use work.CONSTANT_Package.ALL;
+use work.constant_package.ALL;
 
 entity shifter is
     generic(

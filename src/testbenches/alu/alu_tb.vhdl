@@ -17,10 +17,10 @@ use ieee.numeric_std.all;
 use ieee.math_real.all;
 use work.constant_package.all;
 
-entity my_alu_tb is
-end entity my_alu_tb;
+entity alu_tb is
+end entity alu_tb;
 
-architecture behavior of my_alu_tb is
+architecture behavior of alu_tb is
 
   -- Signal declarations
   signal s_op1            : std_logic_vector(DATA_WIDTH_GEN - 1 downto 0) := (others => '0');
@@ -35,14 +35,14 @@ architecture behavior of my_alu_tb is
 begin
 
   -- Instantiate ALU
-  lu1 : entity alu
+  lu1 : entity work.alu
     generic map (DATA_WIDTH_GEN, ALU_OPCODE_WIDTH)
     port map (
-      pi_op1       => s_op1,
-      pi_op2       => s_op2,
-      pi_aluOp     => s_luOp,
-      po_aluOut    => s_luOut,
-      po_carryOut  => s_carryOut
+      pi_op1        => s_op1,
+      pi_op2        => s_op2,
+      pi_alu_op     => s_luOp,
+      po_alu_out    => s_luOut,
+      po_carry_out  => s_carryOut
     );
 
   -- ALU test process

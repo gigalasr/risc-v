@@ -1,3 +1,4 @@
 *.cf
 *.vhdlmake
 build
+vcd

@@ -23,5 +23,3 @@ if [ "$2" = "check" ]; then
     rm -rf $NAME_DIR
     cd ..
 fi
-
-#git commit -m "$1"
