@@ -1,3 +1,10 @@
+-- Laboratory RA solutions/versuch1
+-- Sommersemester 25
+-- Group Details
+-- Lab Date:
+-- 1. Participant First and Last Name: Lars Pfrenger
+-- 2. Participant First and Last Name: Rouven Schönigt
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.constant_package.ALL;

@@ -1,10 +1,10 @@
--- Laboratory GdTi solutions/versuch8
--- Winter Semester 24/25
+-- Laboratory RA solutions/versuch1
+-- Sommersemester 25
 -- Group Details
 -- Lab Date:
--- 1. Participant First and  Last Name: 
--- 2. Participant First and Last Name:
- 
+-- 1. Participant First and Last Name: Lars Pfrenger
+-- 2. Participant First and Last Name: Rouven Schönigt
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;

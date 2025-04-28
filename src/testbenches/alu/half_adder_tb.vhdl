@@ -1,17 +1,9 @@
--- Laboratory GdTi solutions/versuch7
--- Winter Semester 24/25
+-- Laboratory RA solutions/versuch1
+-- Sommersemester 25
 -- Group Details
 -- Lab Date:
--- 1. Participant First and  Last Name: 
--- 2. Participant First and Last Name:
- 
- 
--- coding conventions
--- g_<name> Generics
--- p_<name> Ports
--- c_<name> Constants
--- s_<name> Signals
--- v_<name> Variables
+-- 1. Participant First and Last Name: Lars Pfrenger
+-- 2. Participant First and Last Name: Rouven Schönigt
 
 library ieee;
 use ieee.std_logic_1164.all;
