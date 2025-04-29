@@ -9,7 +9,6 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.constant_package.ALL;
 
-
 entity alu is
   generic (
     G_DATA_WIDTH   : integer := DATA_WIDTH_GEN;
