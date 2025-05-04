@@ -1,6 +1,10 @@
 # risc-v CPU in VHDL
 
 ## How To Run
+### Labor 2
+- Labor 2 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run single_port_ram_tb`
+
+### Labor 1
 - Labor 1 Aufgabe 3: `tools/vhdlmake/build/vhdlmake run gen_mux_tb`
 - Labor 1 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run pipeline_register_tb`
 - Labor 1 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run alu_tb`
