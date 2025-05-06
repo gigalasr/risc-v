@@ -3,8 +3,7 @@ style:
   signalPrefix: s_ 
   variablePrefix: v_
   objectCasing: ignore
-  constantGenericCasing: CONSTANT_CASE
-  genericPrefix: G_
+  constantGenericCasing: snake_case
   outPrefix: po_
   inPrefix: pi_
   inoutPrefix: pio_ 
