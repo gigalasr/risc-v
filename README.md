@@ -2,6 +2,7 @@
 
 ## How To Run
 ### Labor 2
+- Labor 2 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run register_file_tb`
 - Labor 2 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run single_port_ram_tb`
 
 ### Labor 1

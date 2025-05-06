@@ -21,15 +21,15 @@ entity register_file is
         pi_clk          : in std_logic := '0';
         pi_rst          : in std_logic := '0';
         
-        pi_readRegData1 : in std_logic_vector(addr_width - 1 downto 0) := (others => '0');
-        pi_readRegData2 : in std_logic_vector(addr_width - 1 downto 0) := (others => '0');
+        pi_readRegAddr1 : in std_logic_vector(addr_width - 1 downto 0) := (others => '0');
+        pi_readRegAddr2 : in std_logic_vector(addr_width - 1 downto 0) := (others => '0');
         
         pi_writeRegAddr : in std_logic_vector(addr_width - 1 downto 0) := (others => '0');
         pi_writeRegData : in std_logic_vector(word_width - 1 downto 0) := (others => '0');
         pi_writeEnable  : in std_logic := '0';
 
         po_readRegData1 : out std_logic_vector(word_width - 1 downto 0) := (others => '0');
-        po_readREgData2 : out std_logic_vector(word_width - 1 downto 0) := (others => '0')
+        po_readRegData2 : out std_logic_vector(word_width - 1 downto 0) := (others => '0')
 
     );
 end entity register_file;
@@ -47,17 +47,17 @@ begin
 
         if rising_edge(pi_clk) then   
             -- Assign Read Ouput 1
-            if(toi(pi_readRegData1) = 0) then
+            if(toi(pi_readRegAddr1) = 0) then
                 po_readRegData1 <= (others => '0');
             else 
-                po_readRegData1 <= s_mem(toi(pi_readRegData1));
+                po_readRegData1 <= s_mem(toi(pi_readRegAddr1));
             end if;    
 
             -- Assign Read Ouput 2
-            if(toi(pi_readRegData2) = 0) then
+            if(toi(pi_readRegAddr2) = 0) then
                 po_readRegData2 <= (others => '0');
             else 
-                po_readRegData2 <= s_mem(toi(pi_readRegData2));
+                po_readRegData2 <= s_mem(toi(pi_readRegAddr2));
             end if;    
             
             -- Set value if write enabled and addr is not 0
