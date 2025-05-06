@@ -13,22 +13,22 @@ use work.utility_package.ALL;
 
 entity single_port_ram is 
     generic(
-        G_WORD_WIDTH : integer := WORD_WIDTH;
-        G_ADDR_WIDTH : integer := REG_ADR_WIDTH  
+        word_width : integer := WORD_WIDTH;
+        addr_width : integer := REG_ADR_WIDTH  
     );
     port (
         pi_clk  : in std_logic := '0';
         pi_rst  : in std_logic := '0';
-        pi_addr : in std_logic_vector(G_ADDR_WIDTH - 1 downto 0) := (others => '0');
-        pi_data : in std_logic_vector(G_WORD_WIDTH - 1 downto 0) := (others => '0');
+        pi_addr : in std_logic_vector(addr_width - 1 downto 0) := (others => '0');
+        pi_data : in std_logic_vector(word_width - 1 downto 0) := (others => '0');
         pi_we   : in std_logic := '0';
 
-        po_data : out std_logic_vector(G_WORD_WIDTH - 1 downto 0) := (others => '0')
+        po_data : out std_logic_vector(word_width - 1 downto 0) := (others => '0')
     );
 end entity single_port_ram;
 
 architecture behavior of single_port_ram is 
-    type mem is array (0 to 2 ** G_ADDR_WIDTH - 1) of std_logic_vector(G_WORD_WIDTH - 1 downto 0);
+    type mem is array (0 to 2 ** addr_width - 1) of std_logic_vector(word_width - 1 downto 0);
     signal s_mem : mem := (others => (others => '0')); 
 begin
     -- Data can be read and written on rising edge 

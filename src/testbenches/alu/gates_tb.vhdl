@@ -28,9 +28,9 @@ architecture behavior of gates_tb is
     constant c_period : time := 10 ns;
 
     begin 
-        AND_UNIT: entity work.gen_and generic map (G_DATA_WIDTH => DATA_WIDTH_GEN) port map (s_in1, s_in2, s_result_and);
-        OR_UNIT: entity work.gen_or generic map (G_DATA_WIDTH => DATA_WIDTH_GEN) port map (s_in1, s_in2, s_result_or);
-        XOR_UNIT: entity work.gen_xor generic map (G_DATA_WIDTH => DATA_WIDTH_GEN) port map (s_in1, s_in2, s_result_xor);
+        AND_UNIT: entity work.gen_and generic map (data_width => DATA_WIDTH_GEN) port map (s_in1, s_in2, s_result_and);
+        OR_UNIT: entity work.gen_or generic map (data_width => DATA_WIDTH_GEN) port map (s_in1, s_in2, s_result_or);
+        XOR_UNIT: entity work.gen_xor generic map (data_width => DATA_WIDTH_GEN) port map (s_in1, s_in2, s_result_xor);
 
     process 
     begin 

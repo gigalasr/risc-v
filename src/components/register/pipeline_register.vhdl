@@ -11,19 +11,19 @@ use work.constant_package.ALL;
 
 entity pipeline_register is 
     generic(
-        G_DATA_WIDTH : integer := DATA_WIDTH_GEN
+        data_width : integer := DATA_WIDTH_GEN
     );
     port (
         pi_clk : in std_logic := '0';
         pi_rst : in std_logic := '0';
-        pi_data : in std_logic_vector(G_DATA_WIDTH - 1 downto 0) := (others => '0');
+        pi_data : in std_logic_vector(data_width - 1 downto 0) := (others => '0');
 
-        po_data : out std_logic_vector(G_DATA_WIDTH - 1 downto 0) := (others => '0')
+        po_data : out std_logic_vector(data_width - 1 downto 0) := (others => '0')
     );
 end entity pipeline_register;
 
 architecture behavior of pipeline_register is 
-    signal s_reg : std_logic_vector(G_DATA_WIDTH - 1  downto 0) := (others => '0');
+    signal s_reg : std_logic_vector(data_width - 1  downto 0) := (others => '0');
 begin
     po_data <= s_reg;
 

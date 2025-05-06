@@ -19,7 +19,7 @@ architecture behaviour of my_gen_n_bit_full_adder_tb is
 begin
   DUT1 : entity work.gen_n_bit_full_adder
   generic map (
-    G_DATA_WIDTH => DATA_WIDTH
+    data_width => DATA_WIDTH
   )
   port map (
     pi_a       => s_input_a,

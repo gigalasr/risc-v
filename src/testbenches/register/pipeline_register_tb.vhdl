@@ -24,7 +24,7 @@ architecture behaviour of pipeline_register_tb is
   constant SIZES : int_array_t := (5,6,8,16,32); 
 begin
     GEN: for i in 0 to 4 generate 
-        my_inst: entity work.pipeline_register generic map (G_DATA_WIDTH => SIZES(i)) 
+        my_inst: entity work.pipeline_register generic map (data_width => SIZES(i)) 
             port map (pi_clk => s_in_clk, 
                       pi_rst => s_in_rst, 
                       pi_data => s_in_data(SIZES(i) - 1 downto 0), 

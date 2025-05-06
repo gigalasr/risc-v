@@ -24,7 +24,7 @@ architecture behaviour of gen_mux_tb is
   constant SIZES : int_array_t := (5,6,8,16,32); 
 begin
     GEN: for i in 0 to 4 generate 
-        my_inst: entity work.gen_mux generic map (G_DATA_WIDTH => SIZES(i)) 
+        my_inst: entity work.gen_mux generic map (data_width => SIZES(i)) 
             port map (pi_sel =>  s_in_sel, 
                       pi_fst =>  s_in_fst(SIZES(i) - 1 downto 0), 
                       pi_snd =>  s_in_snd(SIZES(i) - 1 downto 0), 

@@ -22,7 +22,7 @@ architecture behavior of shifter_tb is
   
   
 begin
-  SHIFTER:        entity work.shifter(behavior)  generic map (G_DATA_WIDTH =>  DATA_WIDTH_GEN) port map (s_op1,s_op2,s_shift_type,s_shift_direction, s_result);
+  SHIFTER:        entity work.shifter(behavior)  generic map (data_width =>  DATA_WIDTH_GEN) port map (s_op1,s_op2,s_shift_type,s_shift_direction, s_result);
 
  process
 
