@@ -1,0 +1,22 @@
+name: Run Testbenches 
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+    
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    container:
+      image: platinshadow/vhdl:1.0.0
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup 
+      run: ./setup.sh
+    - name: Build
+      run: tools/vhdlmake/build/vhdlmake build
+    - name: Run Testbenches
+      run: scripts/test_all.sh
+
