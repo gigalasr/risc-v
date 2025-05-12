@@ -94,6 +94,6 @@ package CodingConventions is
     -- 2. Beispiel für eine Testbench-Assertion:
     --    assert po_result = expected_value
     --    report "Fehler: Ergebnis entspricht nicht dem Erwartungswert."
-    --    severity error;
+    --    severity failure;
 
 end package CodingConventions;

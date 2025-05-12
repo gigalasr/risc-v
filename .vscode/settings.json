@@ -76,7 +76,8 @@
     "cmake.debugConfig": {
         "cwd": "/workspaces/ra",
         "args": [
-            "subset"
+            "run",
+            "amogus"
         ]
     }
 }

@@ -59,19 +59,19 @@ begin
         s_luOp  <= AND_ALU_OP;
         s_expect <= s_op1 and s_op2;
         wait for PERIOD;
-        assert (s_expect = s_luOut) report "Error in AND operation" severity error;
+        assert (s_expect = s_luOut) report "Error in AND operation" severity failure;
 
         -- OR operation test
         s_luOp  <= OR_ALU_OP;
         s_expect <= s_op1 or s_op2;
         wait for PERIOD;
-        assert (s_expect = s_luOut) report "Error in OR operation" severity error;
+        assert (s_expect = s_luOut) report "Error in OR operation" severity failure;
 
         -- XOR operation test
         s_luOp  <= XOR_ALU_OP;
         s_expect <= s_op1 xor s_op2;
         wait for PERIOD;
-        assert (s_expect = s_luOut) report "Error in XOR operation" severity error;
+        assert (s_expect = s_luOut) report "Error in XOR operation" severity failure;
 
         -- Shift operations (SLL, SRL, SRA)
         if (op2_i >= 0 and op2_i < integer(log2(real(DATA_WIDTH_GEN)))) then
@@ -84,7 +84,7 @@ begin
             s_expect(op2_i - 1 downto 0) <= (others => '0');
             s_expect(DATA_WIDTH_GEN - 1 downto op2_i) <= s_op1(DATA_WIDTH_GEN - 1 - op2_i downto 0);
           end if;
-          wait for PERIOD; assert (s_expect = s_luOut)   report "Error in SLL operation"   severity error;
+          wait for PERIOD; assert (s_expect = s_luOut)   report "Error in SLL operation"   severity failure;
 
           -- Logical shift right (SRL)
           s_luOp  <= SRL_ALU_OP;
@@ -95,7 +95,7 @@ begin
             s_expect(DATA_WIDTH_GEN - 1 - op2_i downto 0) <= s_op1(DATA_WIDTH_GEN - 1 downto op2_i);
           end if;
           wait for PERIOD;
-          assert (s_expect = s_luOut)   report "Error in SRL operation"   severity error;
+          assert (s_expect = s_luOut)   report "Error in SRL operation"   severity failure;
 
           -- Arithmetic shift right (SRA)
           s_luOp <= SRA_ALU_OP;
@@ -105,7 +105,7 @@ begin
             s_expect(DATA_WIDTH_GEN - 1 - op2_i downto 0) <= s_op1(DATA_WIDTH_GEN - 1 downto op2_i);
           end if;
           wait for PERIOD;
-          assert (s_expect = s_luOut)   report "Error in SRA operation"   severity error;
+          assert (s_expect = s_luOut)   report "Error in SRA operation"   severity failure;
         end if;
 
         -- ADD operation test
@@ -114,7 +114,7 @@ begin
         if (((op1_i + op2_i) /= to_integer(signed(s_luOut))) and
             ((op1_i + op2_i - 2 ** DATA_WIDTH_GEN) /= to_integer(signed(s_luOut))) and
             ((to_integer(signed(s_luOut)) /= (op1_i + op2_i) mod (2 ** DATA_WIDTH_GEN)))) then
-          report "Error in ADD operation"   severity error;
+          report "Error in ADD operation"   severity failure;
         end if;
 
         -- SUB operation test
@@ -123,7 +123,7 @@ begin
         if (((op1_i - op2_i) /= to_integer(signed(s_luOut))) and
             ((op1_i - op2_i - 2 ** DATA_WIDTH_GEN) /= to_integer(signed(s_luOut))) and
             ((to_integer(signed(s_luOut)) /= (op1_i - op2_i) mod (2 ** DATA_WIDTH_GEN)))) then
-          report "Error in SUB operation" severity error;
+          report "Error in SUB operation" severity failure;
         end if;
       end loop;
     end loop;

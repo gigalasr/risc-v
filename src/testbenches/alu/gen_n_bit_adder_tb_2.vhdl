@@ -49,7 +49,7 @@ begin
 
         if ((ai+bi) /= v_sum_in_loop) and ((ai+bi- 2**C_DATA_WIDTH) /= (v_sum_in_loop)) then
           v_error_count := v_error_count + 1;
-          report integer'image(ai) & "+" & integer'image(bi) & " ==> " & integer'image(ai+bi) & " but simulation returns " & integer'image(v_sum_in_loop) severity error;
+          report integer'image(ai) & "+" & integer'image(bi) & " ==> " & integer'image(ai+bi) & " but simulation returns " & integer'image(v_sum_in_loop) severity failure;
         end if;
         wait for 1 fs;
       end loop;
@@ -77,7 +77,7 @@ begin
         if s_carry_out = '0' then
           if ((ai-bi) /= v_sum_in_loop) and ((ai-bi) /= (v_sum_in_loop mod 2**C_DATA_WIDTH)) then 
             v_error_count := v_error_count + 1;
-            report integer'image(ai) & "-" & integer'image(bi) & " ==> " & integer'image(ai-bi) & " but simulation returns " & integer'image(v_sum_in_loop) severity error;
+            report integer'image(ai) & "-" & integer'image(bi) & " ==> " & integer'image(ai-bi) & " but simulation returns " & integer'image(v_sum_in_loop) severity failure;
           end if;
         end if;
         wait for 1 fs;

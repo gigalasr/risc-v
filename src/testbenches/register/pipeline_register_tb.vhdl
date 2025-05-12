@@ -35,21 +35,21 @@ begin
             s_in_rst <= '1';
             s_in_clk <= '1';
             wait for 1 ns;
-            assert s_out_data(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity error; 
+            assert s_out_data(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity failure; 
 
             s_expect <= (others => '0');
             s_in_data <= (others => '1');
             s_in_rst <= '0';
             s_in_clk <= '0';
             wait for 1 ns;
-            assert s_out_data(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): should be 0 before clock" severity error; 
+            assert s_out_data(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): should be 0 before clock" severity failure; 
 
             s_expect <= (others => '1');
             s_in_data <= (others => '1');
             s_in_rst <= '0';
             s_in_clk <= '1';
             wait for 1 ns;
-            assert s_out_data(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): should be 1 before clock" severity error; 
+            assert s_out_data(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): should be 1 before clock" severity failure; 
             wait;
 
             s_expect <= (others => '1');
@@ -57,7 +57,7 @@ begin
             s_in_rst <= '0';
             s_in_clk <= '0';
             wait for 1 ns;
-            assert s_out_data(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): should be 1 after clock" severity error; 
+            assert s_out_data(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): should be 1 after clock" severity failure; 
             wait;
         end process;
         assert false report "end of test" severity note;

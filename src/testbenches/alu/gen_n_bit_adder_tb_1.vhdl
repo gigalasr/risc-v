@@ -43,7 +43,7 @@ begin
         wait for 1 fs;
         if ((ai+bi) /= to_integer(signed(s_sum))) and ((ai+bi- 2**DATA_WIDTH) /= (to_integer(signed(s_sum)))) then
           v_error_count := v_error_count + 1;
-          report integer'image(ai) & "+" & integer'image(bi) & " ==> " & integer'image(ai+bi) & " but simulation returns " & integer'image(to_integer(signed(s_sum))) severity error;
+          report integer'image(ai) & "+" & integer'image(bi) & " ==> " & integer'image(ai+bi) & " but simulation returns " & integer'image(to_integer(signed(s_sum))) severity failure;
         end if;
         wait for 1 fs;
       end loop;

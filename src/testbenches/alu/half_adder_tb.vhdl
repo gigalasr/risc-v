@@ -18,19 +18,19 @@ begin
 
   process begin
     s_inA <= '0'; s_inB <= '0'; wait for 1 fs;
-    assert (s_sum='0') and (s_carry='0') report "bad result for input 0 0" severity error;
+    assert (s_sum='0') and (s_carry='0') report "bad result for input 0 0" severity failure;
     wait for 1 fs;
 
     s_inA <= '1'; s_inB <= '0'; wait for 1 fs;
-    assert (s_sum='1') and (s_carry='0') report "bad result for input 1 0" severity error;
+    assert (s_sum='1') and (s_carry='0') report "bad result for input 1 0" severity failure;
     wait for 1 fs;
 
     s_inA <= '0'; s_inB <= '1'; wait for 1 fs;
-    assert (s_sum='1') and (s_carry='0') report "bad result for input 0 1" severity error;
+    assert (s_sum='1') and (s_carry='0') report "bad result for input 0 1" severity failure;
     wait for 1 fs;
 
     s_inA <= '1'; s_inB <= '1'; wait for 1 fs;
-    assert (s_sum='0') and (s_carry='1') report "bad result for input 1 1" severity error;
+    assert (s_sum='0') and (s_carry='1') report "bad result for input 1 1" severity failure;
     wait for 1 fs;
     
     assert false report "end of test" severity note;

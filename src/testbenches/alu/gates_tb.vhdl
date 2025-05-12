@@ -43,17 +43,17 @@ architecture behavior of gates_tb is
         -- AND 
         s_result_expected <= s_in1 and s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity error;
+        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity failure;
         
         -- OR 
         s_result_expected <= s_in1 or s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity error;
+        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity failure;
 
         -- XOR 
         s_result_expected <= s_in1 xor s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity error;
+        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity failure;
     
         wait for c_period/2;
         
@@ -65,17 +65,17 @@ architecture behavior of gates_tb is
         -- AND 
         s_result_expected <= s_in1 and s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity error;
+        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity failure;
         
         -- OR 
         s_result_expected <= s_in1 or s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity error;
+        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity failure;
 
         -- XOR 
         s_result_expected <= s_in1 xor s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity error;
+        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity failure;
     
         wait for c_period/2;
          
@@ -87,17 +87,17 @@ architecture behavior of gates_tb is
         -- AND 
         s_result_expected <= s_in1 and s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity error;
+        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity failure;
         
         -- OR 
         s_result_expected <= s_in1 or s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity error;
+        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity failure;
 
         -- XOR 
         s_result_expected <= s_in1 xor s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity error;
+        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity failure;
     
         wait for c_period/2;
     
@@ -109,17 +109,17 @@ architecture behavior of gates_tb is
         -- AND 
         s_result_expected <= s_in1 and s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity error;
+        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity failure;
         
         -- OR 
         s_result_expected <= s_in1 or s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity error;
+        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity failure;
 
         -- XOR 
         s_result_expected <= s_in1 xor s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity error;
+        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity failure;
     
         wait for c_period/2;
 
@@ -131,17 +131,17 @@ architecture behavior of gates_tb is
         -- AND 
         s_result_expected <= s_in1 and s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity error;
+        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity failure;
         
         -- OR 
         s_result_expected <= s_in1 or s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity error;
+        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity failure;
 
         -- XOR 
         s_result_expected <= s_in1 xor s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity error;
+        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity failure;
     
         wait for c_period/2;
 
@@ -153,17 +153,17 @@ architecture behavior of gates_tb is
         -- AND 
         s_result_expected <= s_in1 and s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity error;
+        assert(s_result_expected = s_result_and) report "Had error in AND-Function " severity failure;
         
         -- OR 
         s_result_expected <= s_in1 or s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity error;
+        assert(s_result_expected = s_result_or) report "Had error in OR-Function " severity failure;
 
         -- XOR 
         s_result_expected <= s_in1 xor s_in2;  
         wait for c_period/2; -- Wait for one clock cycle
-        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity error;
+        assert(s_result_expected = s_result_xor) report "Had error in XOR-Function " severity failure;
     
         wait for c_period/2;
         

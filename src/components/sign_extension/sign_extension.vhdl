@@ -41,8 +41,7 @@ begin
 
   -- U-Type
   po_unsignedImm(31 downto 12) <= pi_instr(31 downto 12);
-  --po_unsignedImm(11 downto 0) <= (others => '0');
-
+  
   -- B-Type
   po_branchImm(12) <= pi_instr(31);
   po_branchImm(11) <= pi_instr(7);

@@ -75,7 +75,7 @@ begin
 
       assert (s_iImmexpect = s_iImmOut)
       report "Had error in sign extender with i-format: Output is  " & to_string(s_iImmOut) & " but should be " & to_string(s_iImmexpect) & " Input is " & to_string(s_iInstruction)
-        severity error;
+        severity failure;
         s_Instruction <= Asm2Std("SH", 1, 0, i);
         s_sImmexpect <= std_logic_vector(to_signed((i), WORD_WIDTH));
 
@@ -86,7 +86,7 @@ begin
   
         assert (s_sImmexpect = s_sImmOut)
         report "Had error in sign extender with s-format"
-            severity error;
+            severity failure;
     end loop;
 
     for i in - ((2 ** 20) - 1) / 2 to ((2 ** 20) - 1) / 2 loop
@@ -101,7 +101,7 @@ begin
       wait for PERIOD / 2;
 
       assert (s_uImmexpect = s_uImmOut)
-      report "Had error in sign extender with u-format" severity error;
+      report "Had error in sign extender with u-format" severity failure;
 
     end loop;
 
@@ -116,7 +116,7 @@ begin
       wait for PERIOD / 2;
 
       assert (s_bImmexpect = s_bImmOut)
-      report "Had error in sign extender with b-format" severity error;
+      report "Had error in sign extender with b-format" severity failure;
 
     end loop;
 
@@ -132,7 +132,7 @@ begin
   
         assert (s_jImmexpect = s_jImmOut)
         report "Had error in sign extender with j-format"
-            severity error;
+            severity failure;
   
 
 

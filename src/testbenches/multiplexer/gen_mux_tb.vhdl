@@ -37,7 +37,7 @@ begin
             s_in_sel <= '0';
 
             wait for 1 ns;
-            assert s_out_res(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity error; 
+            assert s_out_res(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity failure; 
 
             s_expect <= (others => '0');
             s_in_fst <= (others => '1');
@@ -45,7 +45,7 @@ begin
             s_in_sel <= '1';
 
             wait for 1 ns;
-            assert s_out_res(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity error; 
+            assert s_out_res(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity failure; 
 
 
             s_expect <= (others => '0');
@@ -54,7 +54,7 @@ begin
             s_in_sel <= '0';
 
             wait for 1 ns;
-            assert s_out_res(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity error; 
+            assert s_out_res(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity failure; 
 
 
             s_expect <= (others => '1');
@@ -63,7 +63,7 @@ begin
             s_in_sel <= '1';
 
             wait for 1 ns;
-            assert s_out_res(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity error; 
+            assert s_out_res(SIZES(i) - 1 downto 0) = s_expect(SIZES(i) - 1 downto 0) report "Gen(" & INTEGER'image(SIZES(i)) & "): bad init state" severity failure; 
 
 
 

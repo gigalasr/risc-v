@@ -44,7 +44,7 @@ begin
         s_expect <= (others => '0');
         s_expect( DATA_WIDTH_GEN-1 downto op2_i) <= s_op1( DATA_WIDTH_GEN-1-op2_i downto 0);
         wait for PERIOD/2;
-        assert(s_expect= s_result)  report "Had error in sll-Function (behavior)"  & "s_expect: " & integer'image(to_integer(unsigned(s_expect))) & " but is " & integer'image(to_integer(unsigned(s_result))) severity error;
+        assert(s_expect= s_result)  report "Had error in sll-Function (behavior)"  & "s_expect: " & integer'image(to_integer(unsigned(s_expect))) & " but is " & integer'image(to_integer(unsigned(s_result))) severity failure;
 
         -- srl
         s_shift_type<='0';
@@ -57,7 +57,7 @@ begin
         s_expect( DATA_WIDTH_GEN-1-op2_i downto 0) <= s_op1( DATA_WIDTH_GEN-1 downto op2_i);
         end if;
         wait for PERIOD/2;
-        assert(s_expect= s_result)  report "Had error in srl-Function (behavior)"& "s_expect: " & integer'image(to_integer(unsigned(s_expect)))   & " but is " & integer'image(to_integer(unsigned(s_result))) severity error;
+        assert(s_expect= s_result)  report "Had error in srl-Function (behavior)"& "s_expect: " & integer'image(to_integer(unsigned(s_expect)))   & " but is " & integer'image(to_integer(unsigned(s_result))) severity failure;
 
         -- sra
         s_shift_type<='1';
@@ -70,7 +70,7 @@ begin
         s_expect( DATA_WIDTH_GEN-1-op2_i downto 0) <= s_op1( DATA_WIDTH_GEN-1 downto op2_i);
         end if;
         wait for PERIOD/2;
-        assert(s_expect= s_result) report  "Had error in sra-Function (behavior)"  & "s_expect: " & integer'image(to_integer(unsigned(s_expect))) & " but is " & integer'image(to_integer(unsigned(s_result))) severity error;
+        assert(s_expect= s_result) report  "Had error in sra-Function (behavior)"  & "s_expect: " & integer'image(to_integer(unsigned(s_expect))) & " but is " & integer'image(to_integer(unsigned(s_result))) severity failure;
 
       end loop;
     end loop;

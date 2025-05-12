@@ -52,7 +52,7 @@ begin
     s_clk <= '0';
     wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding" severity error;
+    report "Error in R-Format decoding" severity failure;
 
     instr := (others => '0');
     func7 := "0" & SUB_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
@@ -66,7 +66,7 @@ begin
     s_clk <= '0';
     wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding" severity error;
+    report "Error in R-Format decoding" severity failure;
 
     instr := (others => '0');
     func7 := "0" & SRA_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
@@ -80,7 +80,7 @@ begin
     s_clk <= '0';
     wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding" severity error;
+    report "Error in R-Format decoding" severity failure;
     instr := (others => '0');
     func7 := "0" & SRL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     func3 := SRL_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -93,7 +93,7 @@ begin
     s_clk <= '0';
     wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding" severity error;
+    report "Error in R-Format decoding" severity failure;
     instr := (others => '0');
     func7 := "0" & SLL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     func3 := SLL_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -106,7 +106,7 @@ begin
     s_clk <= '0';
     wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding" severity error;
+    report "Error in R-Format decoding" severity failure;
     instr := (others => '0');
     func7 := "0" & OR_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     func3 := OR_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -119,7 +119,7 @@ begin
     s_clk <= '0';
     wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding" severity error;
+    report "Error in R-Format decoding" severity failure;
     instr := (others => '0');
     func7 := "0" & XOR_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     func3 := XOR_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -132,7 +132,7 @@ begin
     s_clk <= '0';
     wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding" severity error;
+    report "Error in R-Format decoding" severity failure;
     instr := (others => '0');
     func7 := "0" & AND_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     func3 := AND_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -145,7 +145,7 @@ begin
     s_clk <= '0';
     wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding" severity error;
+    report "Error in R-Format decoding" severity failure;
 
     instr := (others => '0');
     func7 := "0" & "0" & "00000";
@@ -160,7 +160,7 @@ begin
     s_clk <= '0';
     wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding" severity error;
+    report "Error in R-Format decoding" severity failure;
 
     assert false
     report "end of test"
