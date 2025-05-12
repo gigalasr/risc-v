@@ -1,7 +1,15 @@
 # risc-v CPU in VHDL
-![Static Badge](https://img.shields.io/badge/VHDL-blue?style=for-the-badge) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white) ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
+![VHDL](https://img.shields.io/badge/VHDL-blue?style=for-the-badge) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white) ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 
 [![Testbenches](https://github.com/gigalasr/risc-v/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/gigalasr/risc-v/actions/workflows/main.yml)
+
+![Graph](docs/graph.svg)
+
+<div align="center">
+
+Current dependency graph generate by [vhdlmake](https://github.com/gigalasr/vhdlmake)
+
+</div>
 
 ## How To Run
 ### Labor 3
