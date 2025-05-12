@@ -12,6 +12,8 @@ jobs:
       image: platinshadow/vhdl:1.0.0
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: recursive
     - name: Setup 
       run: ./setup.sh
     - name: Build
