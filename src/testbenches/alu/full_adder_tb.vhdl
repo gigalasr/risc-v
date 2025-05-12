@@ -16,10 +16,10 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity my_full_adder_tb is
-end my_full_adder_tb;
+entity full_adder_tb is
+end full_adder_tb;
 
-architecture behaviour of my_full_adder_tb is
+architecture behaviour of full_adder_tb is
   signal s_inA,s_inB,s_carry_in,s_sum,s_carry_out : std_logic;
 begin
   full_adder_0: entity work.full_adder(structure) port map (pi_a=>s_inA,pi_b=>s_inB,pi_carry=>s_carry_in,po_sum=>s_sum,po_carry=>s_carry_out);

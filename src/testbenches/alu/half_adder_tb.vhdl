@@ -8,10 +8,10 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity my_half_adder_tb is
-end my_half_adder_tb;
+entity half_adder_tb is
+end half_adder_tb;
 
-architecture behaviour of my_half_adder_tb is
+architecture behaviour of half_adder_tb is
   signal s_inA,s_inB,s_sum,s_carry : std_logic;
 begin
   half_adder_0: entity work.half_adder(dataflow) port map (pi_a=>s_inA, pi_b=>s_inB, po_sum=>s_sum, po_carry=>s_carry);
