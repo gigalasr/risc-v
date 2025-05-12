@@ -74,9 +74,9 @@
     },
     "cmake.sourceDirectory": "/workspaces/ra/tools/vhdlmake",
     "cmake.debugConfig": {
-        "cwd": "/workspaces/ra/src",
+        "cwd": "/workspaces/ra",
         "args": [
-            "build"
+            "subset"
         ]
     }
 }

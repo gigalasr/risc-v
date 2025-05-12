@@ -1,6 +1,10 @@
 # risc-v CPU in VHDL
 
 ## How To Run
+### Labor 3
+- Labor 2 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run decoder_tb`
+
+
 ### Labor 2
 - Labor 2 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run register_file_tb`
 - Labor 2 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run single_port_ram_tb`
