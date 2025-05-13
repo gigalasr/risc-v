@@ -154,7 +154,7 @@ begin
 
     v_expectedControlWord.I_IMM_SEL := '0';
     v_expectedControlWord.ALU_OP    := "0000";
-    -- v_expectedControlWord.REG_WRITE := '0';
+    v_expectedControlWord.REG_WRITE := '0';
     s_clk <= '1';
     wait for PERIOD / 2;
     s_clk <= '0';

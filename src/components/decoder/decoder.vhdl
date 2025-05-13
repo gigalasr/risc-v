@@ -35,9 +35,6 @@ architecture arch of decoder is begin
     process(pi_instruction) is
         variable v_insFormat : t_instruction_type := nullFormat;
     begin 
-        -- Hardcoded for now
-        po_controlWord.REG_WRITE <= '1';
-
         -- Decode instruction type
         case pi_instruction(6 downto 0) is
             when R_INS_OP => v_insFormat := rFormat;
@@ -49,7 +46,11 @@ architecture arch of decoder is begin
             when rFormat =>
                 po_controlWord.ALU_OP(3)          <= pi_instruction(30);
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
-            when others => po_controlWord.ALU_OP  <= (others => '0');
+                -- Hardcoded for now
+                po_controlWord.REG_WRITE <= '1';
+            when others => 
+                po_controlWord.ALU_OP  <= (others => '0');
+                po_controlWord.REG_WRITE <= '0';
         end case;
     end process;
 end architecture;
