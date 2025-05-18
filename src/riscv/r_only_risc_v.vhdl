@@ -17,6 +17,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.constant_package.all;
 use work.types_package.all;
+use work.utility_package.all;
 
 entity r_only_RISC_V is
   port (
@@ -316,5 +317,4 @@ s_reg_file_pi_readRegAddr2 <= s_instr_cache_reg_po_data(24 downto 20);
 s_reg_file_pi_writeRegAddr <= s_idex_reg_3_po_data;
 s_reg_file_pi_writeRegData <= s_mem_wb_res_po_data;
 s_reg_file_pi_writeEnable  <= s_cwr_3_po_controlWord.REG_WRITE;  
-
 end architecture;

@@ -14,10 +14,11 @@
 -- ========================================================================
 
 library ieee;
-  use ieee.std_logic_1164.all;
-  use ieee.numeric_std.all;
-  use work.constant_package.all;
-  use work.types_package.all;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.constant_package.all;
+use work.types_package.all;
+use work.utility_package.all;
 
 entity R_only_RISC_V_tb is
 end entity R_only_RISC_V_tb;
@@ -66,61 +67,65 @@ riscv_inst : entity work.R_only_RISC_V
     if (i = 5) then -- after 5 clock clock cycles
         assert (to_integer(signed(s_registersOut(10))) = 9)
          report "OR-Operation failed. Register 10 contains " & integer'image(to_integer(signed(s_registersOut(10)))) & " but should contain " & integer'image(9) & " after cycle 4"
-          severity error;
+          severity failure;
      end if;
 
     if (i = 6) then -- after 6 clock clock cycles
         assert (to_integer(signed(s_registersOut(8)))= 17)
           report "ADD-Operation failed. Register 8 contains " & integer'image(to_integer(signed(s_registersOut(8)))) & " but should contain " & integer'image(17) & " after cycle 5"
-          severity error;
+          severity failure;
      end if;
 
       if (i =7) then -- after 7 clock clock cycles
         assert (to_integer(signed(s_registersOut(11))) = 1)
          report "SUB-Operation failed. Register 11 contains " & integer'image(to_integer(signed(s_registersOut(11)))) & " but should contain " & integer'image(1) & " after cycle 6"
-         severity error;
+         severity failure;
      end if;
 
       if (i = 8) then -- after 8 clock clock cycles
         assert (to_integer(signed(s_registersOut(12))) = 1)
          report "SUB-Operation failed. Register 12 contains " & integer'image(to_integer(signed(s_registersOut(12)))) & " but should contain " & integer'image(1) & " after cycle 8"
-          severity error;
+          severity failure;
 
      end if;
       if (i = 9) then -- after 9 clock clock cycles
         assert (to_integer(signed(s_registersOut(12))) = 25)
           report "ADD-Operation failed. Register 12 contains " & integer'image(to_integer(signed(s_registersOut(12)))) & " but should contain " & integer'image(25) & " after cycle 7"
-          severity error;
+          severity failure;
      end if;
 
            if (i = 10) then -- after 10 clock clock cycles
         assert (to_integer(signed(s_registersOut(12))) = -1)
           report "SUB-Operation failed. Register 12 contains " & integer'image(to_integer(signed(s_registersOut(12)))) & " but should contain " & integer'image(-1) & " after cycle 8"
-          severity error;
+          severity failure;
      end if;
      if (i = 11) then
         assert (to_integer(signed(s_registersOut(12))) = 8)
           report "AND-Operation failed. Register 12 contains " & integer'image(to_integer(signed(s_registersOut(12)))) & " but should contain 1"
-          severity error;
+          severity failure;
       end if;
 
       if (i = 12) then
         assert (to_integer(signed(s_registersOut(12))) = 1)
           report "XOR-Operation failed. Register 12 contains " & integer'image(to_integer(signed(s_registersOut(12)))) & " but should contain 17"
-          severity error;
+          severity failure;
       end if;
 
       if (i = 13) then
         assert (to_integer(signed(s_registersOut(14))) = -8)
           report "SUB-Operation failed. Register 14 contains " & integer'image(to_integer(signed(s_registersOut(14)))) & " but should contain -16"
-          severity error;
+          severity failure;
       end if;
 
       if (i = 14) then
         assert (to_integer(signed(s_registersOut(15))) = -9)
           report "SUB-Operation failed. Register 15 contains " & integer'image(to_integer(signed(s_registersOut(15)))) & " but should contain -7"
-          severity error;
+          severity failure;
       end if;
+
+      report(integer'image(i));
+      print_instr(s_instructions(i), s_registersOut);
+      print_mem(s_registersOut);
 
     end loop;
     
