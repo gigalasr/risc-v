@@ -33,8 +33,6 @@ architecture structure of r_only_RISC_V is
 
   signal s_clk, s_rst : std_logic := '0';
 
-  signal s_reg_file_pi_clk : std_logic := '0';
-
   signal s_pc_adder_po_sum          : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
   signal s_pc_adder_pi_a            : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
   signal s_pc_po_data               : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
@@ -121,7 +119,7 @@ instr_cache: entity work.instruction_cache
             generic map(WORD_WIDTH)
             port map(
               pi_adr => s_instr_cache_pi_adr,            
-              pi_clk => s_clk,             
+              pi_clk => not s_clk,             
               pi_rst => s_rst,             
               pi_instructionCache => pi_instruction,
               po_instruction => s_instr_cache_po_data
@@ -301,7 +299,7 @@ s_mem_wb_res_pi_data <= s_ex_mem_res_po_data;
 ---********************************************************************
 reg_file: entity work.register_file 
           port map(
-            pi_clk => s_reg_file_pi_clk,
+            pi_clk => not s_clk,
             pi_rst => s_rst,
             pi_readRegAddr1 => s_reg_file_pi_readRegAddr1,
             pi_readRegAddr2 => s_reg_file_pi_readRegAddr2,
@@ -317,7 +315,6 @@ s_reg_file_pi_readRegAddr1 <= s_instr_cache_reg_po_data(19 downto 15);
 s_reg_file_pi_readRegAddr2 <= s_instr_cache_reg_po_data(24 downto 20);
 s_reg_file_pi_writeRegAddr <= s_idex_reg_3_po_data;
 s_reg_file_pi_writeRegData <= s_mem_wb_res_po_data;
-s_reg_file_pi_writeEnable  <= s_cwr_3_po_controlWord.REG_WRITE; 
-s_reg_file_pi_clk <= not s_clk;
+s_reg_file_pi_writeEnable  <= s_cwr_3_po_controlWord.REG_WRITE;  
 
 end architecture;
