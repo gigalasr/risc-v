@@ -142,7 +142,7 @@ begin
             s_in_writeEnable(n) <= '0'; wait for 1 ns;
             s_in_clk(n) <= '0'; wait for 1 ns;
             s_in_clk(n) <= '1'; wait for 1 ns;
-
+ 
             assert (s_out_readRegData1(n)(SIZES(n) - 1 downto 0)) = (s_expected_mem(i)(SIZES(n) - 1 downto 0)) report "did not write" severity failure;
         end loop;
 

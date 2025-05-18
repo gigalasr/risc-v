@@ -62,14 +62,18 @@ begin
         end if;
 
         -- Assign Read Ouput 1
-        if(toi(pi_readRegAddr1) = 0) then
+        if(toi(pi_readRegAddr1) = toi(pi_writeRegAddr) AND pi_writeEnable = '1') then
+            po_readRegData1 <= pi_writeRegData;
+        elsif(toi(pi_readRegAddr1) = 0) then
             po_readRegData1 <= (others => '0');
         else 
             po_readRegData1 <= s_mem(toi(pi_readRegAddr1))(word_width-1 downto 0);
         end if;    
 
         -- Assign Read Ouput 2
-        if(toi(pi_readRegAddr2) = 0) then
+        if(toi(pi_readRegAddr2) = toi(pi_writeRegAddr) AND pi_writeEnable = '1') then
+            po_readRegData1 <= pi_writeRegData;
+        elsif(toi(pi_readRegAddr2) = 0) then
             po_readRegData2 <= (others => '0');
         else 
             po_readRegData2 <= s_mem(toi(pi_readRegAddr2))(word_width-1 downto 0);
