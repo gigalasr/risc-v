@@ -11,6 +11,7 @@ use IEEE.NUMERIC_STD.ALL;
 use IEEE.MATH_REAL.ALL;
 use work.constant_package.ALL;
 use work.utility_package.ALL;
+use work.types_package.ALL;
 
 entity register_file_tb is
 end register_file_tb;
@@ -42,8 +43,8 @@ architecture behaviour of register_file_tb is
     signal s_out_readRegData2 : word_vec_t := (others => (others => '0'));
 
     -- Do not convert to ASCII, worst mistake of my life
-    type mem is array (0 to 2 ** ADDR_WIDTH - 1) of std_logic_vector(WORD_WIDTH - 1 downto 0);
-    signal s_expected_mem : mem := (
+   
+    signal s_expected_mem : registermemory := (
         0 =>  B"01001110_01100101_01001110_01100101",
         1 =>  B"01110110_01100101_01110110_01100101",
         2 =>  B"01110010_00100000_01110010_00100000",

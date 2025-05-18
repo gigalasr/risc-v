@@ -14,8 +14,8 @@ entity pipeline_register is
         data_width : integer := DATA_WIDTH_GEN
     );
     port (
-        pi_clk : in std_logic := '0';
-        pi_rst : in std_logic := '0';
+        pi_clk  : in std_logic := '0';
+        pi_rst  : in std_logic := '0';
         pi_data : in std_logic_vector(data_width - 1 downto 0) := (others => '0');
 
         po_data : out std_logic_vector(data_width - 1 downto 0) := (others => '0')

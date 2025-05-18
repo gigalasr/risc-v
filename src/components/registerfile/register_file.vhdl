@@ -7,9 +7,11 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use ieee.numeric_std.all;
+use IEEE.NUMERIC_STD.ALL;
+use IEEE.MATH_REAL.ALL;
 use work.constant_package.ALL;
 use work.utility_package.ALL;
+use work.types_package.ALL;
 
 entity register_file is 
     generic(
@@ -29,15 +31,22 @@ entity register_file is
         pi_writeEnable  : in std_logic := '0';
 
         po_readRegData1 : out std_logic_vector(word_width - 1 downto 0) := (others => '0');
-        po_readRegData2 : out std_logic_vector(word_width - 1 downto 0) := (others => '0')
+        po_readRegData2 : out std_logic_vector(word_width - 1 downto 0) := (others => '0');
 
+        po_registerOut  : out registermemory
     );
 end entity register_file;
 
 architecture behavior of register_file is 
-    type mem is array (1 to reg_amount) of std_logic_vector(word_width - 1 downto 0);
-    signal s_mem : mem := (others => (others => '0')); 
+    signal s_mem : registermemory := (
+        1 => std_logic_vector(to_unsigned(9, 32)),
+        2 => std_logic_vector(to_unsigned(8, 32)),
+        others => (others => '0')
+    ); 
 begin
+    -- Debug Output
+    po_registerOut <= s_mem;
+    
     -- Data can be read and written on rising edge 
     process(pi_clk, pi_rst) begin
         -- Reset 
@@ -50,19 +59,19 @@ begin
             if(toi(pi_readRegAddr1) = 0) then
                 po_readRegData1 <= (others => '0');
             else 
-                po_readRegData1 <= s_mem(toi(pi_readRegAddr1));
+                po_readRegData1 <= s_mem(toi(pi_readRegAddr1))(word_width-1 downto 0);
             end if;    
 
             -- Assign Read Ouput 2
             if(toi(pi_readRegAddr2) = 0) then
                 po_readRegData2 <= (others => '0');
             else 
-                po_readRegData2 <= s_mem(toi(pi_readRegAddr2));
+                po_readRegData2 <= s_mem(toi(pi_readRegAddr2))(word_width-1 downto 0);
             end if;    
             
             -- Set value if write enabled and addr is not 0
             if(pi_writeEnable = '1' AND toi(pi_writeRegAddr) /= 0) then 
-                s_mem(toi(pi_writeRegAddr)) <= pi_writeRegData;
+                s_mem(toi(pi_writeRegAddr))(word_width-1 downto 0) <= pi_writeRegData;
             end if;
         end if;
     end process;
