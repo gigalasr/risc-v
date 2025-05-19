@@ -19,16 +19,16 @@ use work.constant_package.all;
 use work.types_package.all;
 use work.utility_package.all;
 
-entity r_only_RISC_V is
+entity r_only_risc_v is
   port (
     pi_rst          : in    std_logic;
     pi_clk          : in    std_logic;
     pi_instruction  : in    memory := (others => (others => '0'));
     po_registersOut : out   registermemory := (others => (others => '0'))
   );
-end entity r_only_RISC_V;
+end entity r_only_risc_v;
 
-architecture structure of r_only_RISC_V is
+architecture structure of r_only_risc_v is
   constant PERIOD                : time                                            := 10 ns;
   constant ADD_FOUR_TO_ADDRESS   : std_logic_vector(WORD_WIDTH - 1 downto 0)       := std_logic_vector(to_signed((4), WORD_WIDTH));
 

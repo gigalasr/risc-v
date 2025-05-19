@@ -21,10 +21,10 @@ library ieee;
   use work.util_asm_package.all;
   use work.utility_package.all;
   
-entity R_only_RISC_V_2_tb is
-end entity R_only_RISC_V_2_tb;
+entity r_only_risc_v_2_tb is
+end entity r_only_risc_v_2_tb;
 
-architecture structure of R_only_RISC_V_2_tb is
+architecture structure of r_only_risc_v_2_tb is
 
   constant PERIOD       : time           := 10 ns;
   -- signals
@@ -48,7 +48,7 @@ architecture structure of R_only_RISC_V_2_tb is
 
 begin
 -- Instanziierung der Entity
-riscv_inst : entity work.r_only_RISC_V
+riscv_inst : entity work.r_only_risc_v
   port map (
     pi_rst             => s_rst,
     pi_clk             => s_clk,
