@@ -20,6 +20,9 @@ jobs:
     - name: Build
       run: |
         tools/vhdlmake/build/vhdlmake graph
+        tools/vhdlmake/build/vhdlmake info src/riscv/r_only_risc_v.vhdl 
+        tools/vhdlmake/build/vhdlmake info src/testbenches/risc-v/r_only_risc_v_tb.vhdl 
+        tools/vhdlmake/build/vhdlmake info src/testbenches/risc-v/r_only_risc_v_2_tb.vhdl
         tools/vhdlmake/build/vhdlmake build
     - name: Run Testbenches
       run: scripts/test_all.sh
