@@ -57,8 +57,6 @@ riscv_inst: entity work.r_only_risc_v
   );
 
   process is
-
-
   begin
     --s_clk <= '0';
    wait for PERIOD/2;
