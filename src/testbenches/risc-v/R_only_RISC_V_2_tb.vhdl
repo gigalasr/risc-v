@@ -48,7 +48,7 @@ architecture structure of R_only_RISC_V_2_tb is
 
 begin
 -- Instanziierung der Entity
-riscv_inst : entity work.R_only_RISC_V
+riscv_inst : entity work.r_only_RISC_V
   port map (
     pi_rst             => s_rst,
     pi_clk             => s_clk,
