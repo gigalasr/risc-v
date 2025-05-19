@@ -18,7 +18,9 @@ jobs:
     - name: Setup 
       run: ./setup.sh
     - name: Build
-      run: tools/vhdlmake/build/vhdlmake build
+      run: |
+        tools/vhdlmake/build/vhdlmake graph
+        tools/vhdlmake/build/vhdlmake build
     - name: Run Testbenches
       run: scripts/test_all.sh
 
