@@ -32,7 +32,6 @@ architecture structure of r_only_risc_v_2_tb is
   signal s_rst          : std_logic      := '0';      
   signal s_registersOut : registerMemory := (others => (others => '0'));
   signal s_instructions : memory := (
-  -- begin solution:
   -- +--------------------------------------------------------------------------+
   -- | 31......25 |  24.....20  | 19.....15 | 14........12 | 11....7 | 6......0 |
   -- |   funct7   |     rs2     |    rs1    |    funct3    |    rd   |  opcode  |
@@ -43,7 +42,6 @@ architecture structure of r_only_risc_v_2_tb is
       4 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
       5 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
       others => (others => '0') 
-  -- end solution!!
   );
 
 begin
