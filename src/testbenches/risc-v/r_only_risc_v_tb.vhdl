@@ -20,10 +20,10 @@ use work.constant_package.all;
 use work.types_package.all;
 use work.utility_package.all;
 
-entity R_only_RISC_V_tb is
-end entity R_only_RISC_V_tb;
+entity r_only_risc_v_tb is
+end entity r_only_risc_v_tb;
 
-architecture structure of R_only_RISC_V_tb is
+architecture r_only_risc_v_tb of r_only_risc_v_tb is
   constant PERIOD        : time                                           := 10 ns;
   -- signals
   signal s_rst           : std_logic                                      := '0';
@@ -46,7 +46,7 @@ architecture structure of R_only_RISC_V_tb is
 
 begin
 
-riscv_inst : entity work.R_only_RISC_V
+riscv_inst : entity work.r_only_risc_v
   port map (
     pi_rst             => s_rst,
     pi_clk             => s_clk,
