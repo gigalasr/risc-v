@@ -318,3 +318,4 @@ s_reg_file_pi_writeRegAddr <= s_idex_reg_3_po_data;
 s_reg_file_pi_writeRegData <= s_mem_wb_res_po_data;
 s_reg_file_pi_writeEnable  <= s_cwr_3_po_controlWord.REG_WRITE;  
 end architecture;
+
