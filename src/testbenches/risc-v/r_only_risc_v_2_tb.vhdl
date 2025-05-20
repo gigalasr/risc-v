@@ -74,6 +74,7 @@ riscv_inst : entity work.r_only_risc_v
       wait for PERIOD / 2;
 
       report "For Cycle: " & integer'image(i) & ": " & integer'image(toi(s_registersOut(2)));
+      -- print_instr(s_registersOut(2), s_instructions);
       if (i = 25) then -- after 5 clock cycles
         assert(toi(s_registersOut(2)) = 17) report "Not the expected value" severity error; -- fixed test not code, lol
       end if;
