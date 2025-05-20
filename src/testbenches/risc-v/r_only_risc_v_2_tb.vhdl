@@ -31,19 +31,11 @@ architecture structure of r_only_risc_v_2_tb is
   signal s_rst          : std_logic      := '0';      
   signal s_registersOut : registerMemory := (others => (others => '0'));
   signal s_instructions : memory := (
-      1  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), -- R-Befehle haben alle den gleichen Opcode, daher hier hardkodiert
-      2  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP), 
-      3  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      4  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
-      5  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP), 
-      6  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      7  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), 
-      8  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP), 
-      9  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      10 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
-      11 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP), 
-      12 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      13 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), 
+      1  => Asm2Std("ADD", 2, 2, 1),
+      5  => Asm2Std("ADD", 2, 2, 1),
+      9  => Asm2Std("ADD", 2, 2, 1), 
+      13 => Asm2Std("ADD", 2, 2, 1),
+      17 => Asm2Std("ADD", 2, 2, 1), 
       others => (others => '0') 
   );
 begin
@@ -69,13 +61,13 @@ riscv_inst: entity work.r_only_risc_v
         assert(toi(s_registersOut(2)) = 8) report "Should be 8 in the beginning" severity error;
       elsif (i = 5) then
         assert(toi(s_registersOut(2)) = 17) report "Should be 17 after cycle 4" severity error;
-      elsif (i = 8) then
+      elsif (i = 9) then
         assert(toi(s_registersOut(2)) = 26) report "Should be 26 after cycle 7" severity error;
-      elsif (i = 11) then
+      elsif (i = 13) then
         assert(toi(s_registersOut(2)) = 35) report "Should be 35 after cycle 10" severity error;
-      elsif (i = 14) then
-        assert(toi(s_registersOut(2)) = 44) report "Should be 44 after cycle 13" severity error;
       elsif (i = 17) then
+        assert(toi(s_registersOut(2)) = 44) report "Should be 44 after cycle 13" severity error;
+      elsif (i = 21) then
         assert(toi(s_registersOut(2)) = 53) report "Should be 53 after cycle 16" severity error;
       end if;
     end loop;
@@ -85,3 +77,4 @@ riscv_inst: entity work.r_only_risc_v
   end process;
 
 end architecture;
+

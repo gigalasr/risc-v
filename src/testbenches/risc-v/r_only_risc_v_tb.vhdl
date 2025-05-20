@@ -133,3 +133,4 @@ riscv_inst : entity work.r_only_risc_v
   wait;
   end process;
 end architecture;
+
