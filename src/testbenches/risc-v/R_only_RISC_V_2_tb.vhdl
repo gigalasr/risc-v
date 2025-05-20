@@ -2,8 +2,8 @@
 -- Sommersemester 25
 -- Group Details
 -- Lab Date:
--- 1. Participant First and Last Name: 
--- 2. Participant First and Last Name:
+-- 1. Participant First and Last Name: Rouven Schönigt
+-- 2. Participant First and Last Name: Lars Pfrenger
 
 -- ========================================================================
 -- Author:       Marcel Rieß
@@ -32,18 +32,24 @@ architecture structure of R_only_RISC_V_2_tb is
   signal s_rst          : std_logic      := '0';      
   signal s_registersOut : registerMemory := (others => (others => '0'));
   signal s_instructions : memory := (
-  -- begin solution:
   -- +--------------------------------------------------------------------------+
   -- | 31......25 |  24.....20  | 19.....15 | 14........12 | 11....7 | 6......0 |
   -- |   funct7   |     rs2     |    rs1    |    funct3    |    rd   |  opcode  |
   -- +--------------------------------------------------------------------------+
-      1 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), -- R-Befehle haben alle den gleichen Opcode, daher hier hardkodiert
-      2 =>std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
-      3 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
-      4 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
-      5 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
+      1  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), -- R-Befehle haben alle den gleichen Opcode, daher hier hardkodiert
+      2  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP), -- NOP mit ADDI
+      3  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
+      4  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
+      5  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
+      6  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
+      7  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), 
+      8  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
+      9  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
+      10 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), 
+      11 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
+      12 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
+      13 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), 
       others => (others => '0') 
-  -- end solution!!
   );
 
 begin
@@ -60,7 +66,6 @@ riscv_inst : entity work.R_only_RISC_V
 
 
   begin
-    --s_clk <= '0';
    wait for PERIOD/2;
     for i in 1 to 25 loop
       s_clk <= '1';
@@ -69,7 +74,7 @@ riscv_inst : entity work.R_only_RISC_V
       wait for PERIOD / 2;
 
       report "For Cycle: " & integer'image(i) & ": " & integer'image(toi(s_registersOut(2)));
-      if (i = 5) then -- after 5 clock cycles
+      if (i = 25) then -- after 5 clock cycles
         assert(toi(s_registersOut(2)) = 17) report "Not the expected value" severity error; -- fixed test not code, lol
       end if;
     end loop;
