@@ -72,12 +72,14 @@
         "valarray": "cpp",
         "variant": "cpp"
     },
-    "cmake.sourceDirectory": "/workspaces/ra/tools/vhdlmake",
+    "cmake.sourceDirectory": [
+        "/workspaces/ra/tools/vhdlmake",
+        "/workspaces/ra/tools/vhdlviz"
+    ],
     "cmake.debugConfig": {
         "cwd": "/workspaces/ra",
         "args": [
-            "run",
-            "amogus"
+            "src/riscv/r_only_risc_v.vhdl"
         ]
     }
 }

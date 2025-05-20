@@ -2,3 +2,4 @@
 *.vhdlmake
 build
 vcd
+tools/vhdlviz
