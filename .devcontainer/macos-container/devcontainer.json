@@ -1,0 +1,24 @@
+{
+    "name": "GHDL",
+    "build": {
+      "dockerfile": "Dockerfile",
+      "args": {
+        "REMOTE_USER": "${localEnv:USER}",
+        "REMOTE_UID": "${localEnv:REMOTE_UID:1000}",
+        "REMOTE_GID": "${localEnv:REMOTE_GID:1000}"
+      }
+    },
+    "remoteUser": "${localEnv:USER}",
+    "privileged": true,
+    "postAttachCommand": "grep -qF 'TAG' $HOME/.bashrc || echo 'PATH=$PATH:/workspaces/ra/tools/vhdlmake/build # TAG' >> $HOME/.bashrc",
+    "customizations": {
+        "vscode": {
+          "extensions": [
+            "g0t00.vhdl-linter",
+            "redhat.vscode-yaml",
+            "ms-vscode.cmake-tools",
+            "ms-vscode.cpptools-extension-pack"
+          ]
+        }
+      }
+  }
