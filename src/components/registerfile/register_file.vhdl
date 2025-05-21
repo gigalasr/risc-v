@@ -72,7 +72,7 @@ begin
 
         -- Assign Read Ouput 2
         if(toi(pi_readRegAddr2) = toi(pi_writeRegAddr) AND pi_writeEnable = '1') then
-            po_readRegData1 <= pi_writeRegData;
+            po_readRegData2 <= pi_writeRegData;
         elsif(toi(pi_readRegAddr2) = 0) then
             po_readRegData2 <= (others => '0');
         else 

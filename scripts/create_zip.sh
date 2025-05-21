@@ -6,8 +6,8 @@ if [ -z "$1" ]
     exit 1
 fi
 
-NAME=pfrenger_lars_$1.zip
-NAME_DIR=pfrenger_lars_$1
+NAME=schoenigt_rouven_$1.zip
+NAME_DIR=schoenigt_rouven_$1
 
 mkdir -p submissions
 

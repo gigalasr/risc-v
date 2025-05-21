@@ -32,28 +32,16 @@ architecture structure of r_only_risc_v_2_tb is
   signal s_rst          : std_logic      := '0';      
   signal s_registersOut : registerMemory := (others => (others => '0'));
   signal s_instructions : memory := (
-  -- +--------------------------------------------------------------------------+
-  -- | 31......25 |  24.....20  | 19.....15 | 14........12 | 11....7 | 6......0 |
-  -- |   funct7   |     rs2     |    rs1    |    funct3    |    rd   |  opcode  |
-  -- +--------------------------------------------------------------------------+
-      1  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), -- R-Befehle haben alle den gleichen Opcode, daher hier hardkodiert
-      2  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP), -- NOP mit ADDI
-      3  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      4  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP),
-      5  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      6  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      7  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), 
-      8  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      9  => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      10 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), 
-      11 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      12 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(0, REG_ADR_WIDTH)) & R_INS_OP),
-      13 => std_logic_vector'("0" & ADD_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000" & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & std_logic_vector(to_unsigned(1, REG_ADR_WIDTH)) & ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0) & std_logic_vector(to_unsigned(2, REG_ADR_WIDTH)) & R_INS_OP), 
+      1  => Asm2Std("ADD", 2, 2, 1),
+      5  => Asm2Std("ADD", 2, 2, 1),
+      9  => Asm2Std("ADD", 2, 2, 1),
+      13 => Asm2Std("ADD", 2, 2, 1),
+      17 => Asm2Std("ADD", 2, 2, 1),
+      21 => Asm2Std("ADD", 2, 2, 1),
       others => (others => '0') 
   );
 
 begin
--- Instanziierung der Entity
 riscv_inst : entity work.r_only_risc_v
   port map (
     pi_rst             => s_rst,
@@ -67,16 +55,25 @@ riscv_inst : entity work.r_only_risc_v
 
   begin
    wait for PERIOD/2;
-    for i in 1 to 25 loop
+    for i in 1 to 21 loop
       s_clk <= '1';
       wait for PERIOD / 2;
       s_clk <= '0';
       wait for PERIOD / 2;
 
       report "For Cycle: " & integer'image(i) & ": " & integer'image(toi(s_registersOut(2)));
-      -- print_instr(s_registersOut(2), s_instructions);
-      if (i = 25) then -- after 5 clock cycles
-        assert(toi(s_registersOut(2)) = 17) report "Not the expected value" severity error; -- fixed test not code, lol
+      if (i = 1) then 
+        assert(toi(s_registersOut(2)) = 8) report "Should be 8 in the begining" severity error;
+      elsif (i = 5) then
+        assert(toi(s_registersOut(2)) = 17) report "Should be 17 after 5 cycles" severity error;
+      elsif (i= 9) then
+        assert(toi(s_registersOut(2)) = 26) report "Should be 26 after 10 cycles" severity error;
+      elsif (i = 13) then
+        assert(toi(s_registersOut(2)) = 35) report "Should be 35 after 15 cycles" severity error;
+      elsif (i = 17) then
+        assert(toi(s_registersOut(2)) = 44) report "Should be 44 after 20 cycles" severity error;
+      elsif (i = 21) then
+        assert(toi(s_registersOut(2)) = 53) report "Should be 53 after 25 cycles" severity error;
       end if;
     end loop;
   report "End of test!!!";
