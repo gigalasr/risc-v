@@ -23,7 +23,7 @@ use work.utility_package.all;
 entity r_only_risc_v_tb is
 end entity r_only_risc_v_tb;
 
-architecture r_only_risc_v_tb of r_only_risc_v_tb is
+architecture structure of r_only_risc_v_tb is
   constant PERIOD        : time                                           := 10 ns;
   -- signals
   signal s_rst           : std_logic                                      := '0';
@@ -133,3 +133,4 @@ riscv_inst : entity work.r_only_risc_v
   wait;
   end process;
 end architecture;
+

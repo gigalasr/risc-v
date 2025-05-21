@@ -4,7 +4,7 @@ ARG REMOTE_USER
 ARG REMOTE_UID
 ARG REMOTE_GID
 
-RUN apt-get update -y && apt-get install -y grep nano git sudo build-essential cmake ghdl gtkwave gdb zip
+RUN apt-get update -y && apt-get install -y grep nano git git-lfs sudo build-essential cmake ghdl gtkwave gdb zip
 
 RUN if [ -n "$REMOTE_USER" ]; then groupadd --gid $REMOTE_GID $REMOTE_USER && \
     useradd --uid $REMOTE_UID --gid $REMOTE_GID -m $REMOTE_USER -s /bin/bash && \

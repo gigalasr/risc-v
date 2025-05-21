@@ -12,9 +12,13 @@ Current dependency graph generate by [vhdlmake](https://github.com/gigalasr/vhdl
 </div>
 
 ## How To Run
+## Labor 4
+- Labor 3 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run r_only_risc_v_tb`
+- Labor 3 Aufgabe 3: `tools/vhdlmake/build/vhdlmake run r_only_risc_v_2_tb`
+
 ### Labor 3
-- Labor 2 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run sign_extension_tb`
-- Labor 2 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run decoder_tb`
+- Labor 3 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run sign_extension_tb`
+- Labor 3 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run decoder_tb`
 
 ### Labor 2
 - Labor 2 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run register_file_tb`
