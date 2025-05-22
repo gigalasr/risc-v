@@ -32,7 +32,10 @@ architecture behavior of alu_tb is
   signal s_carryOut       : std_logic;
   signal s_shiftType      : std_logic;
   signal s_shiftDirection : std_logic;
+  signal s_zero           : std_logic;
+  signal s_zeroarray      : std_logic_vector(ALU_OPCODE_WIDTH - 1 downto 0) := (others => '0');
   constant PERIOD         : time := 1 ns; -- Example: Clock period of 1 ns
+  signal s_text, s_test2  : integer := 0;
 begin
 
   -- Instantiate ALU
@@ -43,7 +46,8 @@ begin
       pi_op2        => s_op2,
       pi_alu_op     => s_luOp,
       po_alu_out    => s_luOut,
-      po_carry_out  => s_carryOut
+      po_carry_out  => s_carryOut,
+      po_zero       => s_zero
     );
 
   -- ALU test process
@@ -124,6 +128,29 @@ begin
             ((op1_i - op2_i - 2 ** DATA_WIDTH_GEN) /= to_integer(signed(s_luOut))) and
             ((to_integer(signed(s_luOut)) /= (op1_i - op2_i) mod (2 ** DATA_WIDTH_GEN)))) then
           report "Error in SUB operation" severity failure;
+        end if;
+
+        -- SLT operation test
+        s_luOp <= SLT_ALU_OP;
+        wait for PERIOD/2;
+        if ((op1_i < op2_i) and (to_integer(signed(s_luOut)) /= 1)) then
+          report integer'image(op1_i) & "<" & integer'image(op2_i) & " ==> " & boolean'image(op1_i < op2_i) & " but sub-op simulation returns " & to_string(s_luOut) severity failure;
+        elsif ((op1_i >= op2_i) and (to_integer(signed(s_luOut)) /= 0)) then
+          report integer'image(op1_i) & "<" & integer'image(op2_i) & " ==> " & boolean'image(op1_i < op2_i) & " but sub-op simulation returns " & to_string(s_luOut) severity failure;
+        end if;
+          assert ((op1_i >= op2_i) and s_zero='1') or (((op1_i < op2_i) and s_zero='0'))
+          report "Had error in zero flag of slt-Function with " & integer'image(to_integer(signed(s_expect))) severity failure;
+      end loop;
+    end loop;
+
+    for op1_i in 0 to (2 ** (DATA_WIDTH_GEN ) - 1) loop
+      s_op1 <= std_logic_vector(to_unsigned(op1_i, DATA_WIDTH_GEN));
+      for op2_i in 0 to (2 ** (DATA_WIDTH_GEN ) - 1) loop
+        s_op2 <= std_logic_vector(to_unsigned(op2_i, DATA_WIDTH_GEN));
+        -- SLTU operation test
+        s_luOp <= SLTU_ALU_OP;
+        if ( (op1_i < op2_i) and (to_integer(signed(s_luOut)) /= 1) and (op1_i >= op2_i) and (to_integer(signed(s_luOut)) /= 0)) then
+          report integer'image(op1_i) & "<" & integer'image(op2_i) & " ==> " & boolean'image(op1_i < op2_i) & " but sltu returns " & to_string(s_luOut) severity failure;
         end if;
       end loop;
     end loop;
