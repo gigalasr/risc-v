@@ -361,6 +361,23 @@ PACKAGE BODY util_asm_package IS
       rs2 := STD_LOGIC_VECTOR(to_unsigned(token3, 5));
       machine_word := funct7 & rs2 & rs1 & funct3 & rd & opcode;
 
+    ELSIF instr = "SLT" THEN
+      opcode := R_INS_OP; -- R-type
+      funct3 := "010";
+      funct7 := "0000000";
+      rd := STD_LOGIC_VECTOR(to_unsigned(token1, 5));
+      rs1 := STD_LOGIC_VECTOR(to_unsigned(token2, 5));
+      rs2 := STD_LOGIC_VECTOR(to_unsigned(token3, 5));
+      machine_word := funct7 & rs2 & rs1 & funct3 & rd & opcode;
+
+    ELSIF instr = "SLTU" THEN
+      opcode := R_INS_OP; -- R-type
+      funct3 := "011";
+      funct7 := "0000000";
+      rd := STD_LOGIC_VECTOR(to_unsigned(token1, 5));
+      rs1 := STD_LOGIC_VECTOR(to_unsigned(token2, 5));
+      rs2 := STD_LOGIC_VECTOR(to_unsigned(token3, 5));
+      machine_word := funct7 & rs2 & rs1 & funct3 & rd & opcode;
     ELSE
       -- Unsupported instruction
       machine_word := (OTHERS => 'X');
