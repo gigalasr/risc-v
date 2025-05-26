@@ -28,12 +28,12 @@ begin
     po_data <= s_reg;
 
     process(pi_clk, pi_rst) begin
-        if rising_edge(pi_clk) then
             if(pi_rst = '1') then
                 s_reg <= (others => '0');
             else 
-                s_reg <= pi_data;
+                if rising_edge(pi_clk) then
+                    s_reg <= pi_data;
+                end if; 
             end if;            
-        end if; 
     end process;
 end architecture behavior;

@@ -13,9 +13,16 @@
 --   as it indicated sub and shift directions
 -- - opcode is 0110011 for R-Type 
 --
+-- R-Type
 -- +--------------------------------------------------------------------------+
 -- | 31......25 |  24.....20  | 19.....15 | 14........12 | 11....7 | 6......0 |
 -- |   funct7   |     rs2     |    rs1    |    funct3    |    rd   |  opcode  |
+-- +--------------------------------------------------------------------------+
+--
+-- I-Type
+-- +--------------------------------------------------------------------------+
+-- | 31...................20 | 19.....15  | 14.......12  | 11....7 | 6......0 |
+-- |        imm[11:0]        |    rs1     |    funct3    |    rd   |  opcode  |
 -- +--------------------------------------------------------------------------+
 
 library ieee;
@@ -38,6 +45,7 @@ architecture arch of decoder is begin
         -- Decode instruction type
         case pi_instruction(6 downto 0) is
             when R_INS_OP => v_insFormat := rFormat;
+            when I_INS_OP => v_insFormat := iFormat;
             when others => v_insFormat := nullFormat; 
         end case;
 
@@ -46,11 +54,21 @@ architecture arch of decoder is begin
             when rFormat =>
                 po_controlWord.ALU_OP(3)          <= pi_instruction(30);
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
-                -- Hardcoded for now
                 po_controlWord.REG_WRITE <= '1';
+                po_controlWord.I_IMM_SEL <= '0';
+            when iFormat =>
+                -- Specialized I-Type (SLLI SRLI SRAI)
+                if pi_instruction(14 downto 12) = "101" OR pi_instruction(14 downto 12) = "001" then 
+                    po_controlWord.ALU_OP(3) <= pi_instruction(30); 
+                end if;
+                
+                po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
+                po_controlWord.REG_WRITE <= '1';
+                po_controlWord.I_IMM_SEL <= '1'; 
             when others => 
                 po_controlWord.ALU_OP  <= (others => '0');
                 po_controlWord.REG_WRITE <= '0';
+                po_controlWord.I_IMM_SEL <= '0';
         end case;
     end process;
 end architecture;

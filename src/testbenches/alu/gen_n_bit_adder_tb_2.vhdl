@@ -99,17 +99,10 @@ begin
     v_error_count := 0;
   
     -- Add
-    -- begin solution:
-
-    -- end solution!!    
-
     report "Exhaustive Tests - ADD - Done.";
     report "Exhaustive Tests - SUBTRACT:";
 
     -- Subtract
-    -- begin solution:
-
-    -- end solution!!
     
     report "Exhaustive Tests - SUBTRACT - Done.";
     report "Exhaustive Tests - Done. Checking for errors...";
