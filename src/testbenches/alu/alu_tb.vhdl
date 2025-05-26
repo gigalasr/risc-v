@@ -65,14 +65,14 @@ begin
         wait for PERIOD / 2;
         assert ((s_op1 and s_op2) = s_luOut)
           report "Fehler bei AND: " & to_string(s_op1) & " AND " & to_string(s_op2)
-          severity error;
+          severity failure;
 
         -- OR
         s_luOp <= OR_ALU_OP;
         wait for PERIOD / 2;
         assert ((s_op1 or s_op2) = s_luOut)
           report "Fehler bei OR"
-          severity error;
+          severity failure;
 
         -- XOR
         s_luOp <= XOR_ALU_OP;
@@ -80,7 +80,7 @@ begin
         wait for PERIOD / 2;
         assert (s_expect = s_luOut)
           report "Fehler bei XOR: " & to_string(s_op1) & " XOR " & to_string(s_op2)
-          severity error;
+          severity failure;
 
         -- === Shift-Operationen ===
         if (op2_i >= 0 and op2_i < integer(log2(real(DATA_WIDTH_GEN)))) then
@@ -97,7 +97,7 @@ begin
           wait for PERIOD / 2;
           assert (s_expect = s_luOut)
             report "Fehler bei SLL"
-            severity error;
+            severity failure;
 
           -- SRL (Shift Right Logical)
           s_luOp <= SRL_ALU_OP;
@@ -111,7 +111,7 @@ begin
           wait for PERIOD / 2;
           assert (s_expect = s_luOut)
             report "Fehler bei SRL"
-            severity error;
+            severity failure;
 
           -- SRA (Shift Right Arithmetic)
           s_luOp <= SRA_ALU_OP;
@@ -125,7 +125,7 @@ begin
           wait for PERIOD / 2;
           assert (s_expect = s_luOut)
             report "Fehler bei SRA"
-            severity error;
+            severity failure;
         end if;
 
         -- === Arithmetische Operationen ===
@@ -141,7 +141,7 @@ begin
         report integer'image(op1_i) & " + " & integer'image(op2_i) & " = " &
                integer'image(op1_i + op2_i) & ", aber Ergebnis: " &
                integer'image(to_integer(signed(s_luOut)))
-        severity error;
+        severity failure;
 
         -- SUB mit Überlaufprüfung
         s_luOp <= SUB_ALU_OP;
@@ -154,7 +154,7 @@ begin
         report integer'image(op1_i) & " - " & integer'image(op2_i) & " = " &
                integer'image(op1_i - op2_i) & ", aber Ergebnis: " &
                integer'image(to_integer(signed(s_luOut)))
-        severity error;
+        severity failure;
 
         -- SLT (Set Less Than, signed)
         s_luOp <= SLT_ALU_OP;
@@ -162,11 +162,11 @@ begin
         if op1_i < op2_i then
           assert to_integer(signed(s_luOut)) = 1
             report "Fehler bei SLT: " & integer'image(op1_i) & " < " & integer'image(op2_i)
-            severity error;
+            severity failure;
         else
           assert to_integer(signed(s_luOut)) = 0
             report "Fehler bei SLT: " & integer'image(op1_i) & " >= " & integer'image(op2_i)
-            severity error;
+            severity failure;
         end if;
 
         wait for PERIOD / 2;
@@ -188,7 +188,7 @@ begin
         if (op1_i < op2_i and to_integer(unsigned(s_luOut)) /= 1) or
            (op1_i >= op2_i and to_integer(unsigned(s_luOut)) /= 0) then
           report "Fehler bei SLTU: " & integer'image(op1_i) & " < " & integer'image(op2_i)
-            severity error;
+            severity failure;
         end if;
       end loop;
     end loop;

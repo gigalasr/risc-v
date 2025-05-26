@@ -58,17 +58,17 @@ riscv_inst: entity work.r_only_risc_v
 
       -- report "For Cycle: " & integer'image(i) & ": " & integer'image(toi(s_registersOut(2)));
       if (i = 1) then 
-        assert(toi(s_registersOut(2)) = 8) report "Should be 8 in the beginning" severity error;
+        assert(toi(s_registersOut(2)) = 8) report "Should be 8 in the beginning" severity failure;
       elsif (i = 5) then
-        assert(toi(s_registersOut(2)) = 17) report "Should be 17 after cycle 4" severity error;
+        assert(toi(s_registersOut(2)) = 17) report "Should be 17 after cycle 4" severity failure;
       elsif (i = 9) then
-        assert(toi(s_registersOut(2)) = 26) report "Should be 26 after cycle 7" severity error;
+        assert(toi(s_registersOut(2)) = 26) report "Should be 26 after cycle 7" severity failure;
       elsif (i = 13) then
-        assert(toi(s_registersOut(2)) = 35) report "Should be 35 after cycle 10" severity error;
+        assert(toi(s_registersOut(2)) = 35) report "Should be 35 after cycle 10" severity failure;
       elsif (i = 17) then
-        assert(toi(s_registersOut(2)) = 44) report "Should be 44 after cycle 13" severity error;
+        assert(toi(s_registersOut(2)) = 44) report "Should be 44 after cycle 13" severity failure;
       elsif (i = 21) then
-        assert(toi(s_registersOut(2)) = 53) report "Should be 53 after cycle 16" severity error;
+        assert(toi(s_registersOut(2)) = 53) report "Should be 53 after cycle 16" severity failure;
       end if;
     end loop;
 

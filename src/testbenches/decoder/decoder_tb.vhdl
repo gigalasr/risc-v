@@ -56,7 +56,7 @@ begin
     v_expectedControlWord.ALU_OP := ADD_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity failure;
 
   
     func7 := "0" & SUB_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
@@ -69,7 +69,7 @@ begin
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding"  severity error;
+    report "Error in R-Format decoding"  severity failure;
 
   
     func7 := "0" & SRA_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
@@ -82,7 +82,7 @@ begin
     v_expectedControlWord.ALU_OP := SRA_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity failure;
 
 
       
@@ -95,7 +95,7 @@ begin
     v_expectedControlWord.ALU_OP := SRL_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity failure;
 
 
   
@@ -108,7 +108,7 @@ begin
     v_expectedControlWord.ALU_OP := SLL_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
 
 
       
@@ -121,7 +121,7 @@ begin
     v_expectedControlWord.ALU_OP := OR_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
 
 
       
@@ -134,7 +134,7 @@ begin
     v_expectedControlWord.ALU_OP := XOR_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
 
 
       
@@ -148,7 +148,7 @@ begin
     v_expectedControlWord.ALU_OP := AND_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
 
     func7 := "0" & SLTU_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     func3 := SLTU_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -159,7 +159,7 @@ begin
     v_expectedControlWord.ALU_OP := SLTU_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
 
   
     func7 := "0" & SLT_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
@@ -171,7 +171,7 @@ begin
     v_expectedControlWord.ALU_OP := SLT_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding" severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding" severity failure;
 
 
 --  I-Format Decoding
@@ -184,7 +184,7 @@ begin
     v_expectedControlWord.ALU_OP := ADD_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword) report "Error in I-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword) report "Error in I-Format decoding"  severity failure;
 
   
     func7 := "0" & SRA_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
@@ -196,7 +196,7 @@ begin
     v_expectedControlWord.ALU_OP := SRA_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword.ALU_OP = v_expectedcontrolword.ALU_OP) report "Error in I-Format decoding"  severity error;
+    assert (s_controlword.ALU_OP = v_expectedcontrolword.ALU_OP) report "Error in I-Format decoding"  severity failure;
 
   func7 := "0" & SRL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     func3 := SRL_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -207,7 +207,7 @@ begin
     v_expectedControlWord.ALU_OP := SRL_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword) report "Error in I-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword) report "Error in I-Format decoding"  severity failure;
 
 func7 := "0" & SLL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     func3 := SLL_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -218,7 +218,7 @@ func7 := "0" & SLL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     v_expectedControlWord.ALU_OP := SLL_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity failure;
 
     func3 := OR_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
     s_instruction <= std_logic_vector(to_signed(9, 12))  & std_logic_vector(to_unsigned(v_rs1, REG_ADR_WIDTH)) & func3 & std_logic_vector(to_unsigned(v_rd, REG_ADR_WIDTH)) & I_INS_OP; 
@@ -228,7 +228,7 @@ func7 := "0" & SLL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     v_expectedControlWord.ALU_OP := OR_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity failure;
 
     func3 := XOR_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
     s_instruction <= std_logic_vector(to_signed(9, 12))  & std_logic_vector(to_unsigned(v_rs1, REG_ADR_WIDTH)) & func3 & std_logic_vector(to_unsigned(v_rd, REG_ADR_WIDTH)) & I_INS_OP; 
@@ -238,7 +238,7 @@ func7 := "0" & SLL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     v_expectedControlWord.ALU_OP := XOR_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity failure;
 
     func3 := AND_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
     s_instruction <= std_logic_vector(to_signed(9, 12))  & std_logic_vector(to_unsigned(v_rs1, REG_ADR_WIDTH)) & func3 & std_logic_vector(to_unsigned(v_rd, REG_ADR_WIDTH)) & I_INS_OP; 
@@ -248,7 +248,7 @@ func7 := "0" & SLL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     v_expectedControlWord.ALU_OP := AND_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity failure;
 
     func3 := SLTU_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
     s_instruction <= std_logic_vector(to_signed(9, 12))  & std_logic_vector(to_unsigned(v_rs1, REG_ADR_WIDTH)) & func3 & std_logic_vector(to_unsigned(v_rd, REG_ADR_WIDTH)) & I_INS_OP; 
@@ -258,7 +258,7 @@ func7 := "0" & SLL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     v_expectedControlWord.ALU_OP := SLTU_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity failure;
 
   
     func3 := SLT_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -269,7 +269,7 @@ func7 := "0" & SLL_ALU_OP (ALU_OPCODE_WIDTH - 1) & "00000";
     v_expectedControlWord.ALU_OP := SLT_ALU_OP;
     v_expectedControlWord.REG_WRITE    := '1';
     wait for 1 ns;
-    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity error;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity failure;
 
 
     assert false   report "End of decoder test!!!"    severity note;

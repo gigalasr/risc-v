@@ -70,7 +70,7 @@ begin
 
     assert readData1 = x"00000000"
     report "RAW hazard: Value mismatch! Expected 00000000, got " & to_hstring(readData1)
-    severity error;
+    severity failure;
   
     writeEnable <= '0';
     clk <= '0';
@@ -80,7 +80,7 @@ begin
     -- Now read register 1 again to verify correct write
     assert readData1 = x"DEADBEEF"
     report "RAW hazard: Value mismatch! Expected DEADBEEF, got " & to_hstring(readData1)
-    severity error;
+    severity failure;
 
     report "Test passed: RAW hazard correctly handled.";
     wait;
