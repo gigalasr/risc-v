@@ -53,16 +53,16 @@ begin
         if rising_edge(pi_clk) then   
             -- Assign Read Ouput 1
             if(toi(pi_readRegAddr1) = 0) then
-                po_readRegData1 <= (others => '0');
+                s_read1 <= (others => '0');
             else 
-                po_readRegData1 <= s_mem(toi(pi_readRegAddr1))(word_width-1 downto 0);
+                s_read1 <= s_mem(toi(pi_readRegAddr1))(word_width-1 downto 0);
             end if;    
 
             -- Assign Read Ouput 2
             if(toi(pi_readRegAddr2) = 0) then
-                po_readRegData2 <= (others => '0');
+                s_read2 <= (others => '0');
             else 
-                po_readRegData2 <= s_mem(toi(pi_readRegAddr2))(word_width-1 downto 0);
+                s_read2 <= s_mem(toi(pi_readRegAddr2))(word_width-1 downto 0);
             end if;   
 
             -- Set value if write enabled and addr is not 0
@@ -71,6 +71,10 @@ begin
             end if;
         end if;
     end process;
+
+    po_readRegData1 <= s_read1;
+    po_readRegData2 <= s_read2;
 end architecture behavior;
+
 
 

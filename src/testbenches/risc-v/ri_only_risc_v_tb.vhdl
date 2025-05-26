@@ -17,10 +17,10 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 USE work.constant_package.ALL;
-USE work.types.ALL;
+USE work.types_package.ALL;
 USE work.util_asm_package.ALL;
-ENTITY ri_only_RISC_V_tb IS
 
+ENTITY ri_only_RISC_V_tb IS
 END ENTITY ri_only_RISC_V_tb;
 
 ARCHITECTURE structure OF ri_only_RISC_V_tb IS

@@ -85,6 +85,21 @@ architecture structure of ri_only_risc_v is
   signal s_reg_file_pi_writeRegData : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
   signal s_reg_file_pi_writeEnable  : std_logic := '0';
 
+  signal s_sign_ext_pi_instr        : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_sign_ext_po_storeImm     : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_sign_ext_po_immediateImm : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_sign_ext_po_unsignedImm  : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_sign_ext_po_branchImm    : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_sign_ext_po_jumpImm      : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+
+  signal s_idex_se_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_idex_se_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+
+  signal s_alu_imm_mux_pi_sel : std_logic := '0';
+  signal s_alu_imm_mux_pi_fst : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_alu_imm_mux_pi_snd : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_alu_imm_mux_po_res : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+
 begin
   s_clk <= pi_clk;
   s_rst <= pi_rst;
@@ -151,6 +166,18 @@ dec: entity work.decoder
      );
 
 s_dec_pi_instruction <= s_instr_cache_reg_po_data;
+
+sign_ex: entity work.sign_extension 
+         port map ( 
+            pi_instr => s_sign_ext_pi_instr,
+            po_storeImm => s_sign_ext_po_storeImm,
+            po_immediateImm => s_sign_ext_po_immediateImm,
+            po_unsignedImm => s_sign_ext_po_unsignedImm,
+            po_branchImm => s_sign_ext_po_branchImm,
+            po_jumpImm => s_sign_ext_po_jumpImm
+         );
+
+s_sign_ext_pi_instr <= s_dec_pi_instruction;
 
 ---********************************************************************
 ---* Pipeline-Register (ID -> EX) 
@@ -241,9 +268,34 @@ idex_op2: entity work.pipeline_register
 s_idex_op2_pi_data <= s_reg_file_po_readRegData2;
 
 
+idex_se: entity work.pipeline_register
+         generic map (WORD_WIDTH)
+         port map(
+            pi_clk => s_clk,
+            pi_rst => s_rst,
+            pi_data => s_idex_se_pi_data,
+            po_data => s_idex_se_po_data
+         );
+
+s_idex_se_pi_data <= s_sign_ext_po_immediateImm;
+
 ---********************************************************************
 ---* execute phase
 ---********************************************************************
+
+alu_imm_mux: entity work.gen_mux
+             generic map (WORD_WIDTH)
+             port map (
+              pi_sel => s_alu_imm_mux_pi_sel,
+              pi_fst => s_alu_imm_mux_pi_fst,
+              pi_snd => s_alu_imm_mux_pi_snd,
+              po_res => s_alu_imm_mux_po_res 
+             );
+
+s_alu_imm_mux_pi_sel <= s_cwr_1_po_controlWord.I_IMM_SEL;
+s_alu_imm_mux_pi_fst <= s_idex_op2_po_data;
+s_alu_imm_mux_pi_snd <= s_idex_se_po_data;
+
 alu: entity work.alu
      generic map (WORD_WIDTH, ALU_OPCODE_WIDTH)
      port map(
@@ -255,8 +307,9 @@ alu: entity work.alu
      );
 
 s_alu_pi_op1 <= s_idex_op1_po_data;
-s_alu_pi_op2 <= s_idex_op2_po_data;
+s_alu_pi_op2 <= s_alu_imm_mux_po_res;
 s_alu_pi_alu_op <= s_cwr_1_po_controlWord.ALU_OP;
+
 
 ---********************************************************************
 ---* Pipeline-Register (EX -> MEM) 
