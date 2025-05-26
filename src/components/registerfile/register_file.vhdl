@@ -16,8 +16,7 @@ use work.types_package.ALL;
 entity register_file is 
     generic(
         word_width : integer := WORD_WIDTH;
-        addr_width : integer := REG_ADR_WIDTH;
-        reg_amount : integer := 2 ** REG_ADR_WIDTH - 1
+        addr_width : integer := REG_ADR_WIDTH
     );
     port (
         pi_clk          : in std_logic := '0';
@@ -38,11 +37,7 @@ entity register_file is
 end entity register_file;
 
 architecture behavior of register_file is 
-    signal s_mem : registermemory := (
-        1 => std_logic_vector(to_signed(9, 32)),
-        2 => std_logic_vector(to_signed(8, 32)),
-        others => (others => '0')
-    ); 
+    signal s_mem : registermemory := others => (others => '0'); 
 begin
     -- Debug Output
     po_registerOut <= s_mem;

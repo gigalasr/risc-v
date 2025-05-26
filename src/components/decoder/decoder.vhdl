@@ -54,16 +54,21 @@ architecture arch of decoder is begin
             when rFormat =>
                 po_controlWord.ALU_OP(3)          <= pi_instruction(30);
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
-                -- Hardcoded for now
                 po_controlWord.REG_WRITE <= '1';
+                po_controlWord.I_IMM_SEL <= '0';
             when iFormat =>
-                po_controlWord.ALU_OP(3)          <= pi_instruction(30); 
+                -- Specialized I-Type (SLLI SRLI SRAI)
+                if pi_instruction(14 downto 12) = "101" OR pi_instruction(14 downto 12) = "001" then 
+                    po_controlWord.ALU_OP(3) <= pi_instruction(30); 
+                end if;
+                
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
                 po_controlWord.REG_WRITE <= '1';
-                po_controlWord.I_IMM_SEL <= '1'; -- Hardcoded per exercise
+                po_controlWord.I_IMM_SEL <= '1'; 
             when others => 
                 po_controlWord.ALU_OP  <= (others => '0');
                 po_controlWord.REG_WRITE <= '0';
+                po_controlWord.I_IMM_SEL <= '0';
         end case;
     end process;
 end architecture;
