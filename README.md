@@ -12,6 +12,10 @@ Current dependency graph generate by [vhdlmake](https://github.com/gigalasr/vhdl
 </div>
 
 ## How To Run
+## Labor 6
+- Labor 6: `tools/vhdlmake/build/vhdlmake run riu_only_risc_v_tb`
+- Labor 6: `tools/vhdlmake/build/vhdlmake run decoder_tb`
+
 ## Labor 5
 - Labor 5 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run alu_tb`
 - Labor 5 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run decoder_tb`
