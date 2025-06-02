@@ -65,6 +65,7 @@ architecture arch of decoder is begin
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '0';
+                po_controlWord.A_SEL <= '0';
                 po_controlWord.WB_SEL <= "00";
             when I_INS_OP =>
                 -- Specialized I-Type (SLLI SRLI SRAI)
@@ -75,17 +76,26 @@ architecture arch of decoder is begin
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1'; 
+                po_controlWord.A_SEL <= '0';
                 po_controlWord.WB_SEL <= "00";
             when LUI_INS_OP =>
                 po_controlWord.ALU_OP <= ADD_ALU_OP;
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1';
+                po_controlWord.A_SEL <= '0';
                 po_controlWord.WB_SEL <= "01";
+            when AUIPC_INS_OP =>
+                po_controlWord.ALU_OP <= ADD_ALU_OP;
+                po_controlWord.REG_WRITE <= '1';
+                po_controlWord.I_IMM_SEL <= '1';
+                po_controlWord.A_SEL <= '1';
+                po_controlWord.WB_SEL <= "00";
             when others => 
                 po_controlWord.ALU_OP  <= (others => '0');
                 po_controlWord.REG_WRITE <= '0';
                 po_controlWord.I_IMM_SEL <= '0';
                 po_controlWord.WB_SEL <= "00";
+                po_controlWord.A_SEL <= '0';
         end case;
     end process;
 end architecture;

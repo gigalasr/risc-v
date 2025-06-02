@@ -95,17 +95,20 @@ architecture structure of riu_only_risc_v is
   signal s_idex_sign_ex_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
   signal s_idex_sign_ex_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
 
-  signal s_alu_imm_mux_pi_sel : std_logic := '0';
-  signal s_alu_imm_mux_pi_fst : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
-  signal s_alu_imm_mux_pi_snd : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
-  signal s_alu_imm_mux_po_res : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_alu_imm_op2_mux_pi_sel : std_logic := '0';
+  signal s_alu_imm_op2_mux_pi_fst : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_alu_imm_op2_mux_pi_snd : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_alu_imm_op2_mux_po_res : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
 
   signal s_imwb_1_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
   signal s_imwb_1_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
   signal s_imwb_2_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
   signal s_imwb_2_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
-  signal s_imwb_3_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
-  signal s_imwb_3_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+
+  signal s_pcex_1_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_pcex_1_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_pcex_2_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_pcex_2_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
 
 begin
   s_clk <= pi_clk;
@@ -134,6 +137,27 @@ begin
   
   s_pc_pi_data <= s_pc_adder_po_sum;
   s_pc_adder_pi_a <= s_pc_po_data;
+
+-- Register for saving PC to EX Phase
+pcex_1: entity work.pipeline_register
+        generic map (WORD_WIDTH)
+        port map (
+          pi_clk => s_clk,
+          pi_rst => s_rst,
+          pi_data => s_pcex_1_pi_data,
+          po_data => s_pcex_1_po_data
+        );
+s_pcex_1_pi_data <= s_pc_po_data;
+
+pcex_2: entity work.pipeline_register
+        generic map (WORD_WIDTH)
+        port map (
+          pi_clk => s_clk,
+          pi_rst => s_rst,
+          pi_data => s_pcex_2_pi_data,
+          po_data => s_pcex_2_po_data
+        );
+s_pcex_2_pi_data <= s_pcex_1_po_data;
 
 ---********************************************************************
 ---* instruction fetch 
@@ -291,7 +315,8 @@ idex_se: entity work.pipeline_register
 with s_instr_cache_reg_po_data(6 downto 0) select
   s_idex_sign_ex_pi_data <= 
     s_sign_ext_po_immediateImm when I_INS_OP,
-    s_sign_ext_po_unsignedImm when LUI_INS_OP,
+    s_sign_ext_po_unsignedImm  when LUI_INS_OP,
+    s_sign_ext_po_unsignedImm  when AUIPC_INS_OP,
     (others => '0')            when others;
 
 ---********************************************************************
@@ -302,15 +327,23 @@ with s_instr_cache_reg_po_data(6 downto 0) select
 alu_imm_mux: entity work.gen_mux
              generic map (WORD_WIDTH)
              port map (
-              pi_sel => s_alu_imm_mux_pi_sel,
-              pi_fst => s_alu_imm_mux_pi_fst,
-              pi_snd => s_alu_imm_mux_pi_snd,
-              po_res => s_alu_imm_mux_po_res 
+              pi_sel => s_alu_imm_op2_mux_pi_sel,
+              pi_fst => s_alu_imm_op2_mux_pi_fst,
+              pi_snd => s_alu_imm_op2_mux_pi_snd,
+              po_res => s_alu_imm_op2_mux_po_res 
              );
 
-s_alu_imm_mux_pi_sel <= s_cwr_1_po_controlWord.I_IMM_SEL;
-s_alu_imm_mux_pi_fst <= s_idex_op2_po_data;
-s_alu_imm_mux_pi_snd <= s_idex_sign_ex_po_data;
+s_alu_imm_op2_mux_pi_sel <= s_cwr_1_po_controlWord.I_IMM_SEL;
+s_alu_imm_op2_mux_pi_fst <= s_idex_op2_po_data;
+s_alu_imm_op2_mux_pi_snd <= s_idex_sign_ex_po_data;
+
+
+-- Mux for selecting between rs1 or pc
+with s_cwr_1_po_controlWord.A_SEL select
+  s_alu_pi_op1 <=
+    s_idex_op1_po_data when '0',
+    s_pcex_2_po_data   when '1',
+    (others => '0') when others;
 
 -- alu (lol)
 alu: entity work.alu
@@ -323,8 +356,8 @@ alu: entity work.alu
        po_carry_out => open
      );
 
-s_alu_pi_op1 <= s_idex_op1_po_data;
-s_alu_pi_op2 <= s_alu_imm_mux_po_res;
+--s_alu_pi_op1 <= s_idex_op1_po_data;
+s_alu_pi_op2 <= s_alu_imm_op2_mux_po_res;
 s_alu_pi_alu_op <= s_cwr_1_po_controlWord.ALU_OP;
 
 
