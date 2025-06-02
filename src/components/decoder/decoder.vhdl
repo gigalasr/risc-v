@@ -24,6 +24,13 @@
 -- | 31...................20 | 19.....15  | 14.......12  | 11....7 | 6......0 |
 -- |        imm[11:0]        |    rs1     |    funct3    |    rd   |  opcode  |
 -- +--------------------------------------------------------------------------+
+--
+-- U-Type
+-- +--------------------------------------------------------------------------+
+-- | 31..............................................12  | 11....7 | 6......0 |
+-- |                    imm[31:12]                       |    rd   |    LUI   |
+-- |                    imm[31:12]                       |    rd   |   AUIPC  |
+-- +--------------------------------------------------------------------------+
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -40,23 +47,26 @@ end entity decoder;
 
 architecture arch of decoder is begin
     process(pi_instruction) is
-        variable v_insFormat : t_instruction_type := nullFormat;
+        -- variable v_insFormat : t_instruction_type := nullFormat;
     begin 
         -- Decode instruction type
-        case pi_instruction(6 downto 0) is
-            when R_INS_OP => v_insFormat := rFormat;
-            when I_INS_OP => v_insFormat := iFormat;
-            when others => v_insFormat := nullFormat; 
-        end case;
+        -- case pi_instruction(6 downto 0) is
+        --     when R_INS_OP => v_insFormat := rFormat;
+        --     when I_INS_OP => v_insFormat := iFormat;
+        --     when LUI_INS_OP => v_insFormat := uFormat;
+        --     when AUIPC_INS_OP => v_insFormat := uFormat;
+        --     when others => v_insFormat := nullFormat; 
+        -- end case;
 
         -- Decode instruction based on type
-        case v_insFormat is
-            when rFormat =>
+        case pi_instruction(6 downto 0) is
+            when R_INS_OP =>
                 po_controlWord.ALU_OP(3)          <= pi_instruction(30);
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '0';
-            when iFormat =>
+                po_controlWord.WB_SEL <= "00";
+            when I_INS_OP =>
                 -- Specialized I-Type (SLLI SRLI SRAI)
                 if pi_instruction(14 downto 12) = "101" OR pi_instruction(14 downto 12) = "001" then 
                     po_controlWord.ALU_OP(3) <= pi_instruction(30); 
@@ -65,10 +75,17 @@ architecture arch of decoder is begin
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1'; 
+                po_controlWord.WB_SEL <= "00";
+            when LUI_INS_OP =>
+                po_controlWord.ALU_OP <= ADD_ALU_OP;
+                po_controlWord.REG_WRITE <= '1';
+                po_controlWord.I_IMM_SEL <= '1';
+                po_controlWord.WB_SEL <= "01";
             when others => 
                 po_controlWord.ALU_OP  <= (others => '0');
                 po_controlWord.REG_WRITE <= '0';
                 po_controlWord.I_IMM_SEL <= '0';
+                po_controlWord.WB_SEL <= "00";
         end case;
     end process;
 end architecture;

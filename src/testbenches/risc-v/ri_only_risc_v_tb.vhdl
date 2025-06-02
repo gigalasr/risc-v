@@ -43,7 +43,7 @@ BEGIN
   ASSERT (to_integer(signed(s_registersOut(reg_num))) = expected)
     REPORT instr & " fehlgeschlagen. Register " & INTEGER'image(reg_num) &
            " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(reg_num)))) &
-           ", sollte aber " & INTEGER'image(expected) & " enthalten!" SEVERITY error;
+           ", sollte aber " & INTEGER'image(expected) & " enthalten!" severity failure;
 END PROCEDURE;
 
 BEGIN
