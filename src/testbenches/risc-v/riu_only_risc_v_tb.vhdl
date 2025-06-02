@@ -41,7 +41,7 @@ ARCHITECTURE structure OF riu_only_RISC_V_tb IS
       REPORT instr & " fehlgeschlagen. Register " & INTEGER'image(reg_num) &
              " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(reg_num)))) &
              ", sollte aber " & INTEGER'image(expected) & " enthalten!"
-      severity error;
+      severity failure;
   END PROCEDURE;
 
   -- Wiederverwendbares Instruktionsset (ADDI, OR, ADD, etc.)
