@@ -66,6 +66,7 @@ architecture arch of decoder is begin
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '0';
                 po_controlWord.A_SEL <= '0';
+                po_controlWord.PC_SEL <= '0';
                 po_controlWord.WB_SEL <= "00";
             when I_INS_OP =>
                 -- Specialized I-Type (SLLI SRLI SRAI)
@@ -77,25 +78,43 @@ architecture arch of decoder is begin
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1'; 
                 po_controlWord.A_SEL <= '0';
+                po_controlWord.PC_SEL <= '0';
                 po_controlWord.WB_SEL <= "00";
-            when LUI_INS_OP =>
+            when LUI_INS_OP => -- u-Format
                 po_controlWord.ALU_OP <= ADD_ALU_OP;
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1';
                 po_controlWord.A_SEL <= '0';
+                po_controlWord.PC_SEL <= '0';
                 po_controlWord.WB_SEL <= "01";
-            when AUIPC_INS_OP =>
+            when AUIPC_INS_OP => -- u-Format
                 po_controlWord.ALU_OP <= ADD_ALU_OP;
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1';
                 po_controlWord.A_SEL <= '1';
+                po_controlWord.PC_SEL <= '0';
                 po_controlWord.WB_SEL <= "00";
+            when JAL_INS_OP => -- j-Format
+                po_controlWord.ALU_OP <= ADD_ALU_OP;
+                po_controlWord.REG_WRITE <= '1';
+                po_controlWord.I_IMM_SEL <= '1';
+                po_controlWord.A_SEL <= '1';
+                po_controlWord.PC_SEL <= '1';
+                po_controlWord.WB_SEL <= "10";
+            when JALR_INS_OP => -- i-format
+                po_controlWord.ALU_OP <= ADD_ALU_OP;
+                po_controlWord.REG_WRITE <= '1';
+                po_controlWord.I_IMM_SEL <= '1';
+                po_controlWord.A_SEL <= '0';
+                po_controlWord.PC_SEL <= '1';
+                po_controlWord.WB_SEL <= "10";
             when others => 
                 po_controlWord.ALU_OP  <= (others => '0');
                 po_controlWord.REG_WRITE <= '0';
                 po_controlWord.I_IMM_SEL <= '0';
                 po_controlWord.WB_SEL <= "00";
                 po_controlWord.A_SEL <= '0';
+                po_controlWord.PC_SEL <= '0';
         end case;
     end process;
 end architecture;

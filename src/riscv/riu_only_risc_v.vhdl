@@ -110,6 +110,18 @@ architecture structure of riu_only_risc_v is
   signal s_pcex_2_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
   signal s_pcex_2_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
 
+  signal s_ex_pc_add_4_po_sum : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_ex_pc_add_4_pi_a : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  
+  signal s_ex_pcp4_1_res_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_ex_pcp4_1_res_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_ex_pcp4_2_res_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_ex_pcp4_2_res_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_ex_pcp4_3_res_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_ex_pcp4_3_res_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_ex_pcp4_4_res_pi_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_ex_pcp4_4_res_po_data : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+
 begin
   s_clk <= pi_clk;
   s_rst <= pi_rst;
@@ -135,7 +147,14 @@ begin
         po_data => s_pc_po_data
       );
   
-  s_pc_pi_data <= s_pc_adder_po_sum;
+-- Mux for switching between ALU (mem) or PC Adder
+with s_cwr_2_po_controlWord.PC_SEL select
+  s_pc_pi_data <=
+    s_pc_adder_po_sum when '0',
+    s_ex_mem_res_po_data when '1',
+    (others => '0') when others;
+
+  -- s_pc_pi_data <= s_pc_adder_po_sum;
   s_pc_adder_pi_a <= s_pc_po_data;
 
 -- Register for saving PC to EX Phase
@@ -208,7 +227,7 @@ sign_ex: entity work.sign_extension
             po_jumpImm => s_sign_ext_po_jumpImm
          );
 
-s_sign_ext_pi_instr <= s_dec_pi_instruction;
+s_sign_ext_pi_instr <= s_instr_cache_reg_po_data;
 
 ---********************************************************************
 ---* Pipeline-Register (ID -> EX) 
@@ -317,6 +336,8 @@ with s_instr_cache_reg_po_data(6 downto 0) select
     s_sign_ext_po_immediateImm when I_INS_OP,
     s_sign_ext_po_unsignedImm  when LUI_INS_OP,
     s_sign_ext_po_unsignedImm  when AUIPC_INS_OP,
+    s_sign_ext_po_jumpImm      when JAL_INS_OP,
+    s_sign_ext_po_immediateImm WHEN JALR_INS_OP,
     (others => '0')            when others;
 
 ---********************************************************************
@@ -355,11 +376,62 @@ alu: entity work.alu
        po_alu_out => s_alu_out,
        po_carry_out => open
      );
-
 --s_alu_pi_op1 <= s_idex_op1_po_data;
 s_alu_pi_op2 <= s_alu_imm_op2_mux_po_res;
 s_alu_pi_alu_op <= s_cwr_1_po_controlWord.ALU_OP;
 
+
+-- Adder to calculate PC+4 for JAL Instruction
+ex_pc_add_4: entity work.gen_n_bit_full_adder 
+             generic map(WORD_WIDTH) 
+             port map(
+               pi_a     => s_ex_pc_add_4_pi_a,
+               pi_b     => ADD_FOUR_TO_ADDRESS,
+               pi_carry => '0',
+               po_sum   => s_ex_pc_add_4_po_sum,
+               po_carry => open
+             );
+s_ex_pc_add_4_pi_a <= s_pc_po_data;      
+
+ex_pcp4_1: entity work.pipeline_register
+         generic map (WORD_WIDTH)
+         port map (
+           pi_clk => s_clk,
+           pi_rst => s_rst,
+           pi_data => s_ex_pcp4_1_res_pi_data,
+           po_data => s_ex_pcp4_1_res_po_data
+         );
+s_ex_pcp4_1_res_pi_data <= s_ex_pc_add_4_po_sum;
+
+ex_pcp4_2: entity work.pipeline_register
+         generic map (WORD_WIDTH)
+         port map (
+           pi_clk => s_clk,
+           pi_rst => s_rst,
+           pi_data => s_ex_pcp4_2_res_pi_data,
+           po_data => s_ex_pcp4_2_res_po_data
+         );
+s_ex_pcp4_2_res_pi_data <= s_ex_pcp4_1_res_po_data;
+
+ex_pcp4_3: entity work.pipeline_register
+         generic map (WORD_WIDTH)
+         port map (
+           pi_clk => s_clk,
+           pi_rst => s_rst,
+           pi_data => s_ex_pcp4_3_res_pi_data,
+           po_data => s_ex_pcp4_3_res_po_data
+         );
+s_ex_pcp4_3_res_pi_data <= s_ex_pcp4_2_res_po_data;
+
+ex_pcp4_4: entity work.pipeline_register
+         generic map (WORD_WIDTH)
+         port map (
+           pi_clk => s_clk,
+           pi_rst => s_rst,
+           pi_data => s_ex_pcp4_4_res_pi_data,
+           po_data => s_ex_pcp4_4_res_po_data
+         );
+s_ex_pcp4_4_res_pi_data <= s_ex_pcp4_3_res_po_data;
 
 ---********************************************************************
 ---* Pipeline-Register (EX -> MEM) 
@@ -421,10 +493,13 @@ s_imwb_2_pi_data <= s_imwb_1_po_data;
 
 
 -- MUX for select the correct result
+--s_sel_alu_mem_pcp4 <= s_ex_pcp4_4_res_po_data when s_cwr_3_po_controlWord.PC_SEL else s_ex_mem_res_po_data;
+
 with s_cwr_3_po_controlWord.WB_SEL select
   s_reg_file_pi_writeRegData <=
-    s_mem_wb_res_po_data when "00",
-    s_imwb_2_po_data     when "01",
+    s_mem_wb_res_po_data     when "00", -- ALU 
+    s_imwb_2_po_data         when "01", -- Immediate
+    s_ex_pcp4_4_res_po_data  when "10", -- PC + 4
     (others => '0') when others;
 
 ---********************************************************************
