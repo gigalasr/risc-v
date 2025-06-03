@@ -4,7 +4,6 @@ use ieee.numeric_std.all;
 use work.constant_package.all;
 use work.types_package.all;
 
-
 entity decoder_tb is
 end entity decoder_tb;
 

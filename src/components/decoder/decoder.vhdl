@@ -32,6 +32,7 @@
 -- |                    imm[31:12]                       |    rd   |   AUIPC  |
 -- +--------------------------------------------------------------------------+
 
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -60,7 +61,7 @@ architecture arch of decoder is begin
 
         -- Decode instruction based on type
         case pi_instruction(6 downto 0) is
-            when R_INS_OP =>
+            when R_INS_OP => -- r-format
                 po_controlWord.ALU_OP(3)          <= pi_instruction(30);
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
                 po_controlWord.REG_WRITE <= '1';
@@ -68,7 +69,7 @@ architecture arch of decoder is begin
                 po_controlWord.A_SEL <= '0';
                 po_controlWord.PC_SEL <= '0';
                 po_controlWord.WB_SEL <= "00";
-            when I_INS_OP =>
+            when I_INS_OP => -- i-format
                 -- Specialized I-Type (SLLI SRLI SRAI)
                 if pi_instruction(14 downto 12) = "101" OR pi_instruction(14 downto 12) = "001" then 
                     po_controlWord.ALU_OP(3) <= pi_instruction(30); 
