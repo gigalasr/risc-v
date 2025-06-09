@@ -32,6 +32,12 @@
 -- |                    imm[31:12]                       |    rd   |   AUIPC  |
 -- +--------------------------------------------------------------------------+
 
+-- B-Type
+-- +--------------------------------------------------------------------------+
+-- | 31............25 | 24...20  | 19...15  | 14.....12 | 11..........7 | 6..0|
+-- |   imm[12|10:5]   |   rs1    |   rs1    |   func3   |  imm[4:1|11]  |  op |
+-- +--------------------------------------------------------------------------+
+
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -59,16 +65,14 @@ architecture arch of decoder is begin
         --     when others => v_insFormat := nullFormat; 
         -- end case;
 
+        po_controlWord <= control_word_init;
+
         -- Decode instruction based on type
         case pi_instruction(6 downto 0) is
             when R_INS_OP => -- r-format
                 po_controlWord.ALU_OP(3)          <= pi_instruction(30);
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
                 po_controlWord.REG_WRITE <= '1';
-                po_controlWord.I_IMM_SEL <= '0';
-                po_controlWord.A_SEL <= '0';
-                po_controlWord.PC_SEL <= '0';
-                po_controlWord.WB_SEL <= "00";
             when I_INS_OP => -- i-format
                 -- Specialized I-Type (SLLI SRLI SRAI)
                 if pi_instruction(14 downto 12) = "101" OR pi_instruction(14 downto 12) = "001" then 
@@ -78,23 +82,16 @@ architecture arch of decoder is begin
                 po_controlWord.ALU_OP(2 downto 0) <= pi_instruction(14 downto 12);
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1'; 
-                po_controlWord.A_SEL <= '0';
-                po_controlWord.PC_SEL <= '0';
-                po_controlWord.WB_SEL <= "00";
             when LUI_INS_OP => -- u-Format
                 po_controlWord.ALU_OP <= ADD_ALU_OP;
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1';
-                po_controlWord.A_SEL <= '0';
-                po_controlWord.PC_SEL <= '0';
                 po_controlWord.WB_SEL <= "01";
             when AUIPC_INS_OP => -- u-Format
                 po_controlWord.ALU_OP <= ADD_ALU_OP;
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1';
                 po_controlWord.A_SEL <= '1';
-                po_controlWord.PC_SEL <= '0';
-                po_controlWord.WB_SEL <= "00";
             when JAL_INS_OP => -- j-Format
                 po_controlWord.ALU_OP <= ADD_ALU_OP;
                 po_controlWord.REG_WRITE <= '1';
@@ -106,9 +103,28 @@ architecture arch of decoder is begin
                 po_controlWord.ALU_OP <= ADD_ALU_OP;
                 po_controlWord.REG_WRITE <= '1';
                 po_controlWord.I_IMM_SEL <= '1';
-                po_controlWord.A_SEL <= '0';
                 po_controlWord.PC_SEL <= '1';
                 po_controlWord.WB_SEL <= "10";
+            when B_INS_OP => -- b-Format
+                case pi_instruction(14 downto 12) is -- funct3
+                    when FUNC3_BEQ => 
+                        po_controlWord.ALU_OP <= SUB_ALU_OP;
+                    when FUNC3_BNE => 
+                        po_controlWord.ALU_OP <= SUB_ALU_OP;
+                        po_controlWord.CMP_RESULT <= '1';
+                    when FUNC3_BLT => 
+                        po_controlWord.ALU_OP <= SLT_ALU_OP;
+                        po_controlWord.CMP_RESULT <= '1';
+                    when FUNC3_BGE => 
+                        po_controlWord.ALU_OP <= SLT_ALU_OP;
+                    when FUNC3_BLTU => 
+                        po_controlWord.ALU_OP <= SLTU_ALU_OP;
+                        po_controlWord.CMP_RESULT <= '1';
+                    when FUNC3_BGEU => 
+                        po_controlWord.ALU_OP <= SLTU_ALU_OP;
+                    when others => po_controlWord.ALU_OP <= (others => '0');
+                end case;
+                po_controlWord.IS_BRANCH <= '1';
             when others => 
                 po_controlWord.ALU_OP  <= (others => '0');
                 po_controlWord.REG_WRITE <= '0';
@@ -116,6 +132,7 @@ architecture arch of decoder is begin
                 po_controlWord.WB_SEL <= "00";
                 po_controlWord.A_SEL <= '0';
                 po_controlWord.PC_SEL <= '0';
+                po_controlWord.IS_BRANCH <= '0';
         end case;
     end process;
 end architecture;

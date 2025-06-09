@@ -9,6 +9,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
 use work.constant_package.ALL;
+use work.utility_package.ALL;
 
 entity alu is
   generic (
@@ -20,7 +21,8 @@ entity alu is
     pi_alu_op      : in std_logic_vector(op_width   - 1  downto 0) := (others => '0');
 
     po_alu_out     : out std_logic_vector(data_width - 1 downto 0) := (others => '0');
-    po_carry_out   : out std_logic := '0'
+    po_carry_out   : out std_logic := '0';
+    po_zero        : out std_logic := '0'
   );
 
 end entity alu;
@@ -46,7 +48,6 @@ begin
   s_carry_in <= pi_alu_op(op_width - 1);
   po_carry_out <= s_carry_out;
 
-
   s_res_slt <= std_logic_vector(to_unsigned(1, data_width)) when (signed(s_op1)) < (signed(s_op2)) else std_logic_vector(to_unsigned(0, data_width));
   s_res_sltu <= std_logic_vector(to_unsigned(1, data_width)) when (unsigned(s_op1)) < (unsigned(s_op2)) else std_logic_vector(to_unsigned(0, data_width));
   
@@ -69,4 +70,5 @@ begin
       s_res_sltu when SLTU_ALU_OP,
       (others => '0') when others;
 
+      po_zero <= '1' when po_alu_out = (po_alu_out'range => '0') else '0';
 end architecture behavior;

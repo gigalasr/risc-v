@@ -25,8 +25,8 @@ entity gen_n_bit_full_adder is
 end entity gen_n_bit_full_adder;
 
 architecture structure of gen_n_bit_full_adder is
-    signal s_carry_temp : std_logic_vector(data_width - 1 downto 0);
-    signal s_b          : std_logic_vector(data_width - 1 downto 0);  
+    signal s_carry_temp : std_logic_vector(data_width - 1 downto 0) := (others => '0');
+    signal s_b          : std_logic_vector(data_width - 1 downto 0) := (others => '0');  
 begin
     GEN: for i in 0 to data_width - 1 generate
         s_b(i) <= pi_b(i) xor pi_carry;
