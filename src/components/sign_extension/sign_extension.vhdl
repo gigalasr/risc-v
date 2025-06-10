@@ -29,15 +29,28 @@ entity sign_extension is
 end entity sign_extension;
 
 architecture arc of sign_extension is
+  signal s_spec_i_imm : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
+  signal s_norm_i_imm : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
 begin
   -- S-Type
   po_storeImm(11 downto 5) <= pi_instr(31 downto 25);
   po_storeImm(4 downto 0) <= pi_instr(11 downto 7);
   po_storeImm(31 downto 12) <= (others => pi_instr(31)); -- sign extension
 
+  -- Specialized I-Type
+  s_spec_i_imm(4 downto 0) <= pi_instr(24 downto 20);
+  s_spec_i_imm(31 downto 5) <= (others => pi_instr(4)); 
+
   -- I-Type
-  po_immediateImm(11 downto 0) <= pi_instr(31 downto 20);
-  po_immediateImm(31 downto 12) <= (others => pi_instr(31)); -- sign extension
+  s_norm_i_imm(11 downto 0) <= pi_instr(31 downto 20);
+  s_norm_i_imm(31 downto 12) <= (others => pi_instr(31)); -- sign extension
+  
+  -- Switch between spec and normal i-type based on func3
+  with pi_instr(14 downto 12) select 
+    po_immediateImm <= 
+      s_spec_i_imm when "101",
+      s_spec_i_imm when "001",
+      s_norm_i_imm when others;
 
   -- U-Type
   po_unsignedImm(31 downto 12) <= pi_instr(31 downto 12);

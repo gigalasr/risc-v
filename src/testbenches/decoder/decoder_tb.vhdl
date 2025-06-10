@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.constant_package.all;
-use work.util_asm_package.ALL;
+USE work.util_asm_package.ALL;
 use work.types_package.all;
 
 
@@ -34,7 +34,7 @@ begin
     variable v_rd  : integer := 6;
     variable v_expectedcontrolword : controlWord := CONTROL_WORD_INIT;
     variable func3 : std_logic_vector(2 downto 0)              := ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
-
+    variable v_shamt : integer := 6;
   begin
 
     -- R-Format Decoding
@@ -43,23 +43,23 @@ begin
     v_expectedControlWord.ALU_OP := ADD_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
     s_instruction <= Asm2Std("ADD",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
-    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity error;
     
   
     v_expectedControlWord.ALU_OP := SUB_ALU_OP;
     s_instruction <=Asm2Std("SUB",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
     assert (s_controlword = v_expectedcontrolword)
-    report "Error in R-Format decoding"  severity failure;
+    report "Error in R-Format decoding"  severity error;
 
 
     v_expectedControlWord.ALU_OP := SRA_ALU_OP;
     s_instruction <=Asm2Std("SRA",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
-    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity error;
 
 
     v_expectedControlWord.ALU_OP := SRL_ALU_OP;
     s_instruction <= Asm2Std("SRL",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
-    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in R-Format decoding"  severity error;
 
 
   
@@ -68,14 +68,14 @@ begin
     v_expectedControlWord.I_IMM_SEL := '0';
     v_expectedControlWord.ALU_OP := SLL_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
 
     s_instruction <=Asm2Std("OR",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
      v_expectedControlWord := CONTROL_WORD_INIT;
      v_expectedControlWord.I_IMM_SEL := '0';
     v_expectedControlWord.ALU_OP := OR_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
 
 
       
@@ -84,7 +84,7 @@ begin
      v_expectedControlWord.I_IMM_SEL := '0';
     v_expectedControlWord.ALU_OP := XOR_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
 
 
       
@@ -93,14 +93,14 @@ begin
      v_expectedControlWord.I_IMM_SEL := '0';
     v_expectedControlWord.ALU_OP := AND_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
 
     s_instruction <=Asm2Std("SLTU",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
      v_expectedControlWord := CONTROL_WORD_INIT;
      v_expectedControlWord.I_IMM_SEL := '0';
     v_expectedControlWord.ALU_OP := SLTU_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
 
   
     s_instruction <= Asm2Std("SLT",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
@@ -108,7 +108,7 @@ begin
      v_expectedControlWord.I_IMM_SEL := '0';
     v_expectedControlWord.ALU_OP := SLT_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in R-Format decoding"  severity error;
 
 
 --  I-Format Decoding
@@ -118,7 +118,7 @@ begin
      v_expectedControlWord.I_IMM_SEL := '1';
     v_expectedControlWord.ALU_OP := ADD_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword) report "Error in I-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in I-Format decoding"  severity error;
 
 
     s_instruction <=Asm2Std("ORI",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
@@ -126,21 +126,21 @@ begin
      v_expectedControlWord.I_IMM_SEL := '1';
     v_expectedControlWord.ALU_OP := OR_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity error;
 
     s_instruction <=Asm2Std("XORI",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
     v_expectedControlWord := CONTROL_WORD_INIT;
      v_expectedControlWord.I_IMM_SEL := '1';
     v_expectedControlWord.ALU_OP := XOR_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity error;
 
     s_instruction <=Asm2Std("ANDI",v_rd,v_rs1,v_rs2);wait for PERIOD / 2;
     v_expectedControlWord := CONTROL_WORD_INIT;
      v_expectedControlWord.I_IMM_SEL := '1';
     v_expectedControlWord.ALU_OP := AND_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in I-Format decoding"  severity error;
 
     
     func3 := ADD_ALU_OP(ALU_OPCODE_WIDTH - 2 downto 0);
@@ -152,7 +152,7 @@ begin
     v_expectedControlWord.ALU_OP := ADD_ALU_OP;
     v_expectedControlWord.PC_SEL:= '1';
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword) report "Error in JALR-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in JALR-Format decoding"  severity error;
 
 
     --  U-Format Decoding
@@ -164,7 +164,7 @@ begin
     v_expectedControlWord.WB_SEL:= "01";
     v_expectedControlWord.ALU_OP := ADD_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in LUI-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in LUI-Format decoding"  severity error;
 
     s_instruction <=Asm2Std("AUIPC",v_rd,v_rs1,v_rs2);-- std_logic_vector(to_signed(9, 20)) & std_logic_vector(to_unsigned(v_rd, REG_ADR_WIDTH)) & AUIPC_INS_OP; 
     wait for PERIOD / 2;
@@ -173,7 +173,7 @@ begin
     v_expectedControlWord.A_SEL:= '1';
     v_expectedControlWord.ALU_OP := ADD_ALU_OP;
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in AUIPC-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in AUIPC-Format decoding"  severity error;
     
     
     
@@ -186,7 +186,7 @@ begin
     v_expectedControlWord.PC_SEL:= '1';
     v_expectedControlWord.A_SEL:= '1';
     v_expectedControlWord.REG_WRITE := '1';
-    assert (s_controlword = v_expectedcontrolword)    report "Error in JAL-Format decoding"  severity failure;
+    assert (s_controlword = v_expectedcontrolword)    report "Error in JAL-Format decoding"  severity error;
     
     -- BRANCH-Format Decoding (BEQ, BNE, BLT, BGE, BLTU, BGEU)
     -- BEQ
@@ -195,7 +195,7 @@ begin
     v_expectedControlWord.ALU_OP := SUB_ALU_OP;
     v_expectedControlWord.IS_BRANCH := '1';
     v_expectedControlWord.CMP_RESULT  := '0';
-    assert (s_controlword = v_expectedcontrolword) report "Error in BEQ decoding" severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in BEQ decoding" severity error;
 
     -- BNE
     s_instruction <= Asm2Std("BNE",v_rd,v_rs1,v_rs2); wait for PERIOD / 2;
@@ -203,7 +203,7 @@ begin
     v_expectedControlWord.ALU_OP := SUB_ALU_OP;
     v_expectedControlWord.IS_BRANCH := '1';
     v_expectedControlWord.CMP_RESULT  := '1';
-    assert (s_controlword = v_expectedcontrolword) report "Error in BNE decoding" severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in BNE decoding" severity error;
 
     -- BLT
     s_instruction <= Asm2Std("BLT",v_rd,v_rs1,v_rs2); wait for PERIOD / 2;
@@ -211,7 +211,7 @@ begin
     v_expectedControlWord.ALU_OP := SLT_ALU_OP;
     v_expectedControlWord.IS_BRANCH := '1';
     v_expectedControlWord.CMP_RESULT  := '1';
-    assert (s_controlword = v_expectedcontrolword) report "Error in BLT decoding" severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in BLT decoding" severity error;
 
     -- BGE
     s_instruction <= Asm2Std("BGE",v_rd,v_rs1,v_rs2); wait for PERIOD / 2;
@@ -219,7 +219,7 @@ begin
     v_expectedControlWord.ALU_OP := SLT_ALU_OP;
     v_expectedControlWord.IS_BRANCH := '1';
     v_expectedControlWord.CMP_RESULT  := '0';
-    assert (s_controlword = v_expectedcontrolword) report "Error in BGE decoding" severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in BGE decoding" severity error;
 
     -- BLTU
     s_instruction <= Asm2Std("BLTU",v_rd,v_rs1,v_rs2); wait for PERIOD / 2;
@@ -227,7 +227,7 @@ begin
     v_expectedControlWord.ALU_OP := SLTU_ALU_OP;
     v_expectedControlWord.IS_BRANCH := '1';
     v_expectedControlWord.CMP_RESULT  := '1';
-    assert (s_controlword = v_expectedcontrolword) report "Error in BLTU decoding" severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in BLTU decoding" severity error;
 
     -- BGEU
     s_instruction <= Asm2Std("BGEU",v_rd,v_rs1,v_rs2); wait for PERIOD / 2;
@@ -235,7 +235,37 @@ begin
     v_expectedControlWord.ALU_OP := SLTU_ALU_OP;
     v_expectedControlWord.IS_BRANCH := '1';
     v_expectedControlWord.CMP_RESULT  := '0';
-    assert (s_controlword = v_expectedcontrolword) report "Error in BGEU decoding" severity failure;
+    assert (s_controlword = v_expectedcontrolword) report "Error in BGEU decoding" severity error;
+
+
+    -- Immediate Shift Instructions (SLLI, SRLI, SRAI)
+
+    -- SLLI
+    s_instruction <= Asm2Std("SLLI", v_rd, v_rs1, v_shamt); wait for PERIOD / 2;
+    v_expectedControlWord := CONTROL_WORD_INIT;
+    v_expectedControlWord.I_IMM_SEL := '1';
+    v_expectedControlWord.ALU_OP := SLL_ALU_OP;
+    v_expectedControlWord.REG_WRITE := '1';
+    assert (s_controlword = v_expectedcontrolword)
+      report "Error in I-Format decoding (SLLI)" severity error;
+
+    -- SRLI
+    s_instruction <= Asm2Std("SRLI", v_rd, v_rs1, v_shamt); wait for PERIOD / 2;
+    v_expectedControlWord := CONTROL_WORD_INIT;
+    v_expectedControlWord.I_IMM_SEL := '1';
+    v_expectedControlWord.ALU_OP := SRL_ALU_OP;
+    v_expectedControlWord.REG_WRITE := '1';
+    assert (s_controlword = v_expectedcontrolword)
+      report "Error in I-Format decoding (SRLI)" severity error;
+
+    -- SRAI
+    s_instruction <= Asm2Std("SRAI", v_rd, v_rs1, v_shamt); wait for PERIOD / 2;
+    v_expectedControlWord := CONTROL_WORD_INIT;
+    v_expectedControlWord.I_IMM_SEL := '1';
+    v_expectedControlWord.ALU_OP := SRA_ALU_OP;
+    v_expectedControlWord.REG_WRITE := '1';
+    assert (s_controlword = v_expectedcontrolword)
+      report "Error in I-Format decoding (SRAI)" severity error;
 
 
 
