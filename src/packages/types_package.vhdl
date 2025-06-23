@@ -1,7 +1,14 @@
+-- Laboratory RA solutions/versuch8
+-- Sommersemester 25
+-- Group Details
+-- Lab Date:
+-- 1. Participant First and Last Name: 
+-- 2. Participant First and Last Name:
+
 -- ========================================================================
 -- Author:       Marcel Rieß
 -- Last updated: 02.05.2025
--- Description:  Holds various custom types_package related to the implementation
+-- Description:  Holds various custom types related to the implementation
 --               that are used throughout the implementation
 -- ========================================================================
 
@@ -17,8 +24,11 @@ package types_package is
     CMP_RESULT   : std_logic;
     IS_BRANCH    : std_logic;
     A_SEL        : std_logic; -- used as a MUX selector for ALU
-    PC_SEL       : std_logic; -- used as a MUX selector for PC
+    PC_SEL        : std_logic; -- used as a MUX selector for PC
     WB_SEL       :std_logic_vector( 1 downto 0);
+    MEM_CTR    : std_logic_vector(2 downto 0);                    
+    MEM_READ   : std_logic;
+    MEM_WRITE  : std_logic;
   end record controlWord;
 
   -- allows initialization of control words, used in decoder
@@ -31,7 +41,10 @@ package types_package is
   IS_BRANCH => '0',
   CMP_RESULT => '0',
   PC_SEL   => '0',
-  WB_SEL   => "00"
+  WB_SEL   => (others => '0'),
+  MEM_CTR     => (others => '0'),
+  MEM_READ    => '0',
+  MEM_WRITE   => '0'
   );
 
   -- enum containig all instruction formats, used in decoder

@@ -38,6 +38,12 @@
 -- |   imm[12|10:5]   |   rs1    |   rs1    |   func3   |  imm[4:1|11]  |  op |
 -- +--------------------------------------------------------------------------+
 
+-- S-Type
+-- +--------------------------------------------------------------------------+
+-- | 31............25 | 24...20  | 19...15  | 14.....12 | 11..........7 | 6..0|
+-- |     imm[11:5]    |   rs2    |   rs1    |   func3   |    imm[4:0]   |  op |
+-- +--------------------------------------------------------------------------+
+
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -53,17 +59,7 @@ entity decoder is
 end entity decoder;
 
 architecture arch of decoder is begin
-    process(pi_instruction) is
-        -- variable v_insFormat : t_instruction_type := nullFormat;
-    begin 
-        -- Decode instruction type
-        -- case pi_instruction(6 downto 0) is
-        --     when R_INS_OP => v_insFormat := rFormat;
-        --     when I_INS_OP => v_insFormat := iFormat;
-        --     when LUI_INS_OP => v_insFormat := uFormat;
-        --     when AUIPC_INS_OP => v_insFormat := uFormat;
-        --     when others => v_insFormat := nullFormat; 
-        -- end case;
+    process(pi_instruction) is begin 
 
         po_controlWord <= control_word_init;
 
@@ -125,14 +121,20 @@ architecture arch of decoder is begin
                     when others => po_controlWord.ALU_OP <= (others => '0');
                 end case;
                 po_controlWord.IS_BRANCH <= '1';
+            when S_INS_OP => -- S-Format
+                po_controlWord.ALU_OP <= ADD_ALU_OP;
+                po_controlWord.I_IMM_SEL <= '1';
+                po_controlWord.MEM_WRITE <= '1';
+                po_controlWord.MEM_CTR <= pi_instruction(14 downto 12);
+            when L_INS_OP => -- I-Format
+                po_controlWord.ALU_OP <= ADD_ALU_OP;
+                po_controlWord.I_IMM_SEL <= '1';
+                po_controlWord.MEM_READ <= '1';
+                po_controlWord.REG_WRITE <= '1';
+                po_controlWord.WB_SEL <= "11";
+                po_controlWord.MEM_CTR <= pi_instruction(14 downto 12);
             when others => 
-                po_controlWord.ALU_OP  <= (others => '0');
-                po_controlWord.REG_WRITE <= '0';
-                po_controlWord.I_IMM_SEL <= '0';
-                po_controlWord.WB_SEL <= "00";
-                po_controlWord.A_SEL <= '0';
-                po_controlWord.PC_SEL <= '0';
-                po_controlWord.IS_BRANCH <= '0';
+                po_controlWord <= control_word_init;
         end case;
     end process;
 end architecture;
