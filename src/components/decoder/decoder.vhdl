@@ -138,3 +138,4 @@ architecture arch of decoder is begin
         end case;
     end process;
 end architecture;
+

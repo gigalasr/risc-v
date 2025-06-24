@@ -162,6 +162,7 @@ begin
     assert (s_controlword = v_expectedcontrolword) report "Error in JALR-Format decoding"  severity error;
 
 
+    
     --  U-Format Decoding
 
     s_instruction <=Asm2Std("LUI",v_rd,v_rs1,v_rs2);-- std_logic_vector(to_signed(9, 20)) & std_logic_vector(to_unsigned(v_rd, REG_ADR_WIDTH)) & LUI_INS_OP; 
