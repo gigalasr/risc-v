@@ -396,7 +396,7 @@ fwd_op2_mux: entity work.gen_mux_4t1
                pi_sel => s_byp_rs2_sel,
                pi_a => s_reg_file_po_readRegData2,   -- no forwarding
                pi_b => s_alu_out,                    -- forward from ex
-               pi_c => s_byp_rs1_mem,                -- forward from mem
+               pi_c => s_byp_rs2_mem,                -- forward from mem
                pi_d => s_mem_wb_res_po_data,         -- forward from wb
                po_res => s_fwd_op2
              );
