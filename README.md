@@ -12,6 +12,10 @@ Current dependency graph generate by [vhdlmake](https://github.com/gigalasr/vhdl
 </div>
 
 ## How To Run
+## Labor 9
+- Labor 9 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run riubs_only_risc_v_tb2`
+- Labor 9 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run riubs_only_risc_v_tb3`
+
 ## Labor 8
 - Labor 8 Aufgabe 1: `tools/vhdlmake/build/vhdlmake run decoder_tb`
 - Labor 8 Aufgabe 2: `tools/vhdlmake/build/vhdlmake run riubs_only_risc_v_tb`

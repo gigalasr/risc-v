@@ -29,3 +29,4 @@ architecture behavior of gen_mux is begin
         pi_snd when '1',
         (others => '0') when others; 
 end architecture behavior;
+

@@ -379,7 +379,7 @@ s_byp_rs2_mem <= s_ram_po_readdata
 
 -- Selector for choosing direct pipeline or forwarded result
 
-fwd_op1_mux: entity work.gen_mux_4t1
+fwd_op1_mux: entity work.gen_mux_fto
              generic map (WORD_WIDTH)
              port map(
                pi_sel => s_byp_rs1_sel,
@@ -390,7 +390,7 @@ fwd_op1_mux: entity work.gen_mux_4t1
                po_res => s_fwd_op1
              );
 
-fwd_op2_mux: entity work.gen_mux_4t1
+fwd_op2_mux: entity work.gen_mux_fto
              generic map (WORD_WIDTH)
              port map(
                pi_sel => s_byp_rs2_sel,
@@ -719,6 +719,7 @@ s_reg_file_pi_writeRegAddr <= s_idex_reg_3_po_data;
 s_reg_file_pi_writeEnable  <= s_cwr_3_po_controlWord.REG_WRITE;  
 
 end architecture;
+
 
 
 

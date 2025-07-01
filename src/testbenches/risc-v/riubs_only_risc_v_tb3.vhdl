@@ -25,17 +25,19 @@ ARCHITECTURE structure OF riubs_only_RISC_V_tb3 IS
 
   SIGNAL s_registersOut     : registerMemory := (OTHERS => (OTHERS => '0'));
   SIGNAL s_instructions     : memory := (OTHERS => (OTHERS => '0'));
-  SIGNAL s_debugdatamemory     : memory := (OTHERS => (OTHERS => '0'));
+  SIGNAL s_debugdatamemory  : memory := (OTHERS => (OTHERS => '0'));
 
   -- Registerprüfung
-  PROCEDURE check_register(expected : INTEGER; reg_num : INTEGER; instr : STRING) IS
+  PROCEDURE check_register(expected : INTEGER; reg_num : INTEGER; instr : STRING; e : out std_logic) IS
   BEGIN
+    e := '0' WHEN (to_integer(signed(s_registersOut(reg_num))) = expected) else '1';
     ASSERT (to_integer(signed(s_registersOut(reg_num))) = expected)
       REPORT instr & " fehlgeschlagen. Register " & INTEGER'image(reg_num) &
              " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(reg_num)))) &
              ", sollte aber " & INTEGER'image(expected) & " enthalten!"
       SEVERITY error;
   END PROCEDURE;
+
 
   -- Wiederverwendbares Instruktionsset (ADDI, OR, ADD, etc.)
   PROCEDURE load_common_instructions(mem : INOUT memory;v_test : INTEGER) IS
@@ -285,7 +287,8 @@ begin
 end process;
 
   -- Prüfroutine (separat lassen für Klarheit)
-  PROCESS (cycle)
+  PROCESS (cycle) is
+    variable MARKER_ERROR       : std_logic := '0'; 
   BEGIN
     IF test >= 1 and test<=4 and s_rst='0' THEN
       -- Prüflogik für LUI0
@@ -293,18 +296,18 @@ end process;
       --        " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(2)))) ;
      
       case cycle is
-        WHEN  6 => check_register(       9,  1, "ADDI" );
-        WHEN  7 => check_register(       8,  2, "ADDI" );
-        WHEN 8 => check_register(       9, 10, "OR"   );
-        WHEN 9 => check_register(      17,  8, "ADD"  );
-        WHEN 10 => check_register(       1, 11, "SUB"  );
-        WHEN 11 => check_register(      -1, 12, "SUB"  );
-        WHEN 12 => check_register(      25, 12, "ADD"  );
-        WHEN 13 => check_register(      -1, 12, "SUB"  );
-        WHEN 14 => check_register(       8,  1, "AND"  );
-        WHEN 15 => check_register(       0, 12, "XOR"  );
-        WHEN 16 => check_register( 8*2**12, 13, "LUI"  );
-        WHEN 17 => check_register(29*2**12, 13, "LUI"  );
+        WHEN  6 => check_register(       9,  1, "ADDI", MARKER_ERROR );
+        WHEN  7 => check_register(       8,  2, "ADDI", MARKER_ERROR );
+        WHEN 8 => check_register(       9, 10, "OR"   , MARKER_ERROR);
+        WHEN 9 => check_register(      17,  8, "ADD"  , MARKER_ERROR);
+        WHEN 10 => check_register(       1, 11, "SUB" , MARKER_ERROR );
+        WHEN 11 => check_register(      -1, 12, "SUB" , MARKER_ERROR );
+        WHEN 12 => check_register(      25, 12, "ADD" , MARKER_ERROR );
+        WHEN 13 => check_register(      -1, 12, "SUB" , MARKER_ERROR );
+        WHEN 14 => check_register(       8,  1, "AND" , MARKER_ERROR );
+        WHEN 15 => check_register(       0, 12, "XOR" , MARKER_ERROR );
+        WHEN 16 => check_register( 8*2**12, 13, "LUI" , MARKER_ERROR );
+        WHEN 17 => check_register(29*2**12, 13, "LUI" , MARKER_ERROR );
         WHEN others => null;
       END CASE;
       end if;
@@ -313,8 +316,8 @@ end process;
       --REPORT "Register " & INTEGER'image(14) &
       --       " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(14)))) ;
       case cycle is
-        WHEN 18 => check_register(    4148, 14, "AUIPC");
-        WHEN 19 => check_register(    4152, 14, "AUIPC");
+        WHEN 18 => check_register(    4148, 14, "AUIPC", MARKER_ERROR);
+        WHEN 19 => check_register(    4152, 14, "AUIPC", MARKER_ERROR);
         WHEN others => null;
       END CASE;
     END IF;
@@ -323,21 +326,21 @@ end process;
       -- REPORT "Register " & INTEGER'image(15) &
       --      " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(15)))) & " cycle: " & INTEGER'image(cycle);
       case cycle is
-        when 20 => check_register(       64,15, "JAL"  );
-        when 24 => check_register(        9, 1, "ADDI" );
-        when 25 => check_register(        8, 2, "ADDI" );
-        when 26 => check_register(        9,10, "OR"   );
-        when 27 => check_register(       17, 8, "ADD"  );
-        when 28 => check_register(        1,11, "SUB"  );
-        when 29 => check_register(       -1,12, "SUB"  );
-        when 30 => check_register(       25,12, "ADD"  );
-        when 31 => check_register(       -1,12, "SUB"  );
-        when 32 => check_register(         8,2, "AND"  );
-        when 33 => check_register(        0,12, "XOR"  );
-        when 34 => check_register( 8*2**12, 13, "LUI"  );
-        when 35 => check_register(29*2**12, 13, "LUI"  );
-        when 36 => check_register(     4148,14, "AUIPC");
-        when 37 => check_register(     4152,14, "AUIPC");
+        when 20 => check_register(       64,15, "JAL"  , MARKER_ERROR);
+        when 24 => check_register(        9, 1, "ADDI" , MARKER_ERROR);
+        when 25 => check_register(        8, 2, "ADDI" , MARKER_ERROR);
+        when 26 => check_register(        9,10, "OR"   , MARKER_ERROR);
+        when 27 => check_register(       17, 8, "ADD"  , MARKER_ERROR);
+        when 28 => check_register(        1,11, "SUB"  , MARKER_ERROR);
+        when 29 => check_register(       -1,12, "SUB"  , MARKER_ERROR);
+        when 30 => check_register(       25,12, "ADD"  , MARKER_ERROR);
+        when 31 => check_register(       -1,12, "SUB"  , MARKER_ERROR);
+        when 32 => check_register(         8,2, "AND"  , MARKER_ERROR);
+        when 33 => check_register(        0,12, "XOR"  , MARKER_ERROR);
+        when 34 => check_register( 8*2**12, 13, "LUI"  , MARKER_ERROR);
+        when 35 => check_register(29*2**12, 13, "LUI"  , MARKER_ERROR);
+        when 36 => check_register(     4148,14, "AUIPC", MARKER_ERROR);
+        when 37 => check_register(     4152,14, "AUIPC", MARKER_ERROR);
         when others => null;
       END CASE;
     END IF;
@@ -346,15 +349,15 @@ end process;
       -- REPORT "Register " & INTEGER'image(15) &
       --      " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(15)))) & " cycle: " & INTEGER'image(cycle);
       case cycle is
-        WHEN 20 => check_register(       64,15, "JAL"  );
-        WHEN 24 => check_register(      220,15, "JALR" );
-        WHEN 29 => check_register(        8,10, "OR"   );
-        WHEN 30 => check_register(       16, 8, "ADD"  );
-        WHEN 31 => check_register(        0,11, "SUB"  );
-        WHEN 32 => check_register(        0,12, "SUB"  );
-        WHEN 33 => check_register(       24,12, "ADD"  );
-        WHEN 34 => check_register(        0,12, "SUB"  );
-        WHEN 35 => check_register(        8, 1, "AND"  );
+        WHEN 20 => check_register(       64,15, "JAL"  , MARKER_ERROR);
+        WHEN 24 => check_register(      220,15, "JALR" , MARKER_ERROR);
+        WHEN 29 => check_register(        8,10, "OR"   , MARKER_ERROR);
+        WHEN 30 => check_register(       16, 8, "ADD"  , MARKER_ERROR);
+        WHEN 31 => check_register(        0,11, "SUB"  , MARKER_ERROR);
+        WHEN 32 => check_register(        0,12, "SUB"  , MARKER_ERROR);
+        WHEN 33 => check_register(       24,12, "ADD"  , MARKER_ERROR);
+        WHEN 34 => check_register(        0,12, "SUB"  , MARKER_ERROR);
+        WHEN 35 => check_register(        8, 1, "AND"  , MARKER_ERROR);
         WHEN others => null;
       END CASE;
     END IF;
@@ -364,47 +367,47 @@ end process;
         --    " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(2)))) & " cycle: " & INTEGER'image(cycle);
             
         case cycle is
-          WHEN 6 => check_register(       9, 1, "ADDI"  );
-          WHEN 7 => check_register(       9, 2, "ADDI"  );
-          WHEN 8 =>  if (test=6) then check_register(       9, 1, "Flush (EX->MEM)"   );end if;
-          WHEN 9 =>  if (test=6) then check_register(       9, 1, "Flush (ID->EX)"   );end if;
-          WHEN 10 =>  if (test=6) then check_register(       9, 1, "Flush (IF->ID)"   );end if;
-          WHEN 12 => check_register(       0, 1, "BEQ"   );
-          WHEN 13 =>  if (test=6) then check_register(      16, 1, "Flush" );end if;
-          WHEN 19 => check_register(       1, 1, "BNE"   );
-          WHEN 20 =>  if (test=6) then check_register(       6, 1, "Flush" );end if;
-          WHEN 26 => check_register(       2, 1, "BLT"   );
-          WHEN 27 =>  if (test=6) then check_register(       9, 1, "Flush" );end if;
-          WHEN 33 => check_register(       3, 1, "BGE"   );
-          WHEN 34 =>  if (test=6) then check_register(      11, 1, "Flush" );end if;
-          WHEN 40 => check_register(       4, 1, "BLTU"  );
-          WHEN 41 =>  if (test=6) then check_register(      15, 1, "Flush" );end if;
-          WHEN 47 => check_register(       5, 1, "BGEU"  );
+          WHEN 6 => check_register(       9, 1, "ADDI"  , MARKER_ERROR);
+          WHEN 7 => check_register(       9, 2, "ADDI"  , MARKER_ERROR);
+          WHEN 8 =>  if (test=6) then check_register(       9, 1, "Flush (EX->MEM)" , MARKER_ERROR  );end if;
+          WHEN 9 =>  if (test=6) then check_register(       9, 1, "Flush (ID->EX)"  , MARKER_ERROR );end if;
+          WHEN 10 =>  if (test=6) then check_register(       9, 1, "Flush (IF->ID)" , MARKER_ERROR  );end if;
+          WHEN 12 => check_register(       0, 1, "BEQ" ,MARKER_ERROR  );
+          WHEN 13 =>  if (test=6) then check_register(      16, 1, "Flush",MARKER_ERROR );end if;
+          WHEN 19 => check_register(       1, 1, "BNE" ,MARKER_ERROR  );
+          WHEN 20 =>  if (test=6) then check_register(       6, 1, "Flush",MARKER_ERROR );end if;
+          WHEN 26 => check_register(       2, 1, "BLT"  ,MARKER_ERROR );
+          WHEN 27 =>  if (test=6) then check_register(       9, 1, "Flush" ,MARKER_ERROR);end if;
+          WHEN 33 => check_register(       3, 1, "BGE",MARKER_ERROR   );
+          WHEN 34 =>  if (test=6) then check_register(      11, 1, "Flush",MARKER_ERROR );end if;
+          WHEN 40 => check_register(       4, 1, "BLTU",MARKER_ERROR  );
+          WHEN 41 =>  if (test=6) then check_register(      15, 1, "Flush",MARKER_ERROR );end if;
+          WHEN 47 => check_register(       5, 1, "BGEU" ,MARKER_ERROR );
 
-          WHEN 48 => check_register(       9, 1, "ADDI"  );
-          WHEN 49 => check_register(       8, 2, "ADDI"  );
-          WHEN 51 => check_register(     666, 1, "BEQ"   );
-          WHEN 52 => check_register(       0, 1, "BEQ"   );
-          WHEN 56 => check_register(     669, 1, "BNE"   );
-          WHEN 57 => check_register(       1, 1, "BNE"   );
-          WHEN 58 => check_register(       6, 1, "BNE"   );
-          WHEN 61 => check_register(     699, 1, "BLT"   );
-          WHEN 62 => check_register(       2, 1, "BLT"   );
-          WHEN 63 => check_register(       9, 1, "BLT"   );
-          WHEN 66 => check_register(     999, 1, "BGE"   );
-          WHEN 67 => check_register(       3, 1, "BGE"   );
-          WHEN 68 => check_register(      11, 1, "BGE"   );
-          WHEN 71 => check_register(     996, 1, "BLTU"  );
-          WHEN 72 => check_register(       4, 1, "BLTU"  );
-          WHEN 73 => check_register(      15, 1, "BLTU"  );
-          WHEN 76 => check_register(     966, 1, "BGEU"  );
-          WHEN 77 => check_register(       5, 1, "BGEU"  );
-          WHEN 86 => check_register(     966, 1, "BGEU, JAL, JALR"  );
-          WHEN 105 => check_register(     966, 1, "BGEU, JAL, JALR"  );
-          WHEN 124 => check_register(     966, 1, "BGEU, JAL, JALR"  );
-          WHEN 134 =>  if (test=6) then  check_register(      5, 1, "Flush" );end if;
-          WHEN 135 =>  if (test=6) then  check_register(      5, 1, "Flush" );end if;
-          WHEN 136 =>  if (test=6) then  check_register(      5, 1, "Flush" );end if;
+          WHEN 48 => check_register(       9, 1, "ADDI"  ,MARKER_ERROR);
+          WHEN 49 => check_register(       8, 2, "ADDI"  ,MARKER_ERROR);
+          WHEN 51 => check_register(     666, 1, "BEQ"   ,MARKER_ERROR);
+          WHEN 52 => check_register(       0, 1, "BEQ"   ,MARKER_ERROR);
+          WHEN 56 => check_register(     669, 1, "BNE"   ,MARKER_ERROR);
+          WHEN 57 => check_register(       1, 1, "BNE"   ,MARKER_ERROR);
+          WHEN 58 => check_register(       6, 1, "BNE"   ,MARKER_ERROR);
+          WHEN 61 => check_register(     699, 1, "BLT"   ,MARKER_ERROR);
+          WHEN 62 => check_register(       2, 1, "BLT"   ,MARKER_ERROR);
+          WHEN 63 => check_register(       9, 1, "BLT"   ,MARKER_ERROR);
+          WHEN 66 => check_register(     999, 1, "BGE"   ,MARKER_ERROR);
+          WHEN 67 => check_register(       3, 1, "BGE"   ,MARKER_ERROR);
+          WHEN 68 => check_register(      11, 1, "BGE"   ,MARKER_ERROR);
+          WHEN 71 => check_register(     996, 1, "BLTU"  ,MARKER_ERROR);
+          WHEN 72 => check_register(       4, 1, "BLTU"  ,MARKER_ERROR);
+          WHEN 73 => check_register(      15, 1, "BLTU"  ,MARKER_ERROR);
+          WHEN 76 => check_register(     966, 1, "BGEU"  ,MARKER_ERROR);
+          WHEN 77 => check_register(       5, 1, "BGEU"  ,MARKER_ERROR);
+          WHEN 86 => check_register(     966, 1, "BGEU, JAL, JALR" , MARKER_ERROR );
+          WHEN 105 => check_register(     966, 1, "BGEU, JAL, JALR", MARKER_ERROR  );
+          WHEN 124 => check_register(     966, 1, "BGEU, JAL, JALR", MARKER_ERROR  );
+          WHEN 134 =>  if (test=6) then  check_register(      5, 1, "Flush", MARKER_ERROR );end if;
+          WHEN 135 =>  if (test=6) then  check_register(      5, 1, "Flush", MARKER_ERROR );end if;
+          WHEN 136 =>  if (test=6) then  check_register(      5, 1, "Flush", MARKER_ERROR );end if;
           WHEN others => null;
       END CASE;
     END IF;
@@ -414,21 +417,21 @@ end process;
       --   " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(15))));
         
        case cycle is
-        WHEN 21 => check_register(       68,15, "JAL"  );
-        WHEN 22 => check_register(        8, 1, "FLUSH"  );
-        WHEN 24 => check_register(        8, 1, "FLUSH"  );
-        WHEN 25 => check_register(        8, 1, "FLUSH"  );
-        WHEN 28 => check_register(      220,15, "JALR" );
-        WHEN 29 => check_register(        8, 1, "FLUSH"  );
-        WHEN 30 => check_register(        8, 1, "FLUSH"  );
-        WHEN 31 => check_register(        8, 1, "FLUSH"  );
-        WHEN 32 => check_register(        8,10, "OR"   );
-        WHEN 33 => check_register(       16, 8, "ADD"  );
-        WHEN 34 => check_register(        0,11, "SUB"  );
-        WHEN 35 => check_register(        0,12, "SUB"  );
-        WHEN 36 => check_register(       24,12, "ADD"  );
-        WHEN 37 => check_register(        0,12, "SUB"  );
-        WHEN 38 => check_register(        8, 1, "AND"  );
+        WHEN 21 => check_register(       68,15, "JAL"    , MARKER_ERROR);
+        WHEN 22 => check_register(        8, 1, "FLUSH"  , MARKER_ERROR);
+        WHEN 24 => check_register(        8, 1, "FLUSH"  , MARKER_ERROR);
+        WHEN 25 => check_register(        8, 1, "FLUSH"  , MARKER_ERROR);
+        WHEN 28 => check_register(      220,15, "JALR"   , MARKER_ERROR);
+        WHEN 29 => check_register(        8, 1, "FLUSH"  , MARKER_ERROR);
+        WHEN 30 => check_register(        8, 1, "FLUSH"  , MARKER_ERROR);
+        WHEN 31 => check_register(        8, 1, "FLUSH"  , MARKER_ERROR);
+        WHEN 32 => check_register(        8,10, "OR"     , MARKER_ERROR);
+        WHEN 33 => check_register(       16, 8, "ADD"    , MARKER_ERROR);
+        WHEN 34 => check_register(        0,11, "SUB"    , MARKER_ERROR);
+        WHEN 35 => check_register(        0,12, "SUB"    , MARKER_ERROR);
+        WHEN 36 => check_register(       24,12, "ADD"    , MARKER_ERROR);
+        WHEN 37 => check_register(        0,12, "SUB"    , MARKER_ERROR);
+        WHEN 38 => check_register(        8, 1, "AND"    , MARKER_ERROR);
         WHEN others => null;
       END CASE;
     END IF;
@@ -439,15 +442,15 @@ end process;
     -- " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(5))));
         
       case cycle is
-        when  6 => check_register( 42,  1, "ADDI");
-        when  7 => check_register( 84,  5, "SLLI");
-        when  8 => check_register(672,  6, "SLLI");
-        when  9 => check_register( 21,  7, "SRLI");
-        when 10 => check_register(  2,  8, "SRLI");
-        when 11 => check_register( 21,  9, "SRAI");
-        when 12 => check_register(  2, 10, "SRAI");
-        when 13 => check_register( -8,  1, "ADDI");
-        when 14 => check_register( -4, 11, "SRAI");
+        when  6 => check_register( 42,  1, "ADDI", MARKER_ERROR);
+        when  7 => check_register( 84,  5, "SLLI", MARKER_ERROR);
+        when  8 => check_register(672,  6, "SLLI", MARKER_ERROR);
+        when  9 => check_register( 21,  7, "SRLI", MARKER_ERROR);
+        when 10 => check_register(  2,  8, "SRLI", MARKER_ERROR);
+        when 11 => check_register( 21,  9, "SRAI", MARKER_ERROR);
+        when 12 => check_register(  2, 10, "SRAI", MARKER_ERROR);
+        when 13 => check_register( -8,  1, "ADDI", MARKER_ERROR);
+        when 14 => check_register( -4, 11, "SRAI", MARKER_ERROR);
         when others => null;
       end case;
     end if;
@@ -458,39 +461,39 @@ end process;
         
 case cycle is
   -- Initialwerte
-  when 6  => check_register(100, 1, "ADDI (BaseAddr)");
-  when 7  => check_register(42,  2, "ADDI (Value42)");
-  when 8  => check_register(-1,  3, "ADDI (Value-1)");
+  when 6  => check_register(100, 1, "ADDI (BaseAddr)", MARKER_ERROR);
+  when 7  => check_register(42,  2, "ADDI (Value42)" , MARKER_ERROR);
+  when 8  => check_register(-1,  3, "ADDI (Value-1)" , MARKER_ERROR);
 
   -- LOAD WORD
-  when 10 => check_register(42,  4, "LW (Load 42)");
+  when 10 => check_register(42,  4, "LW (Load 42)", MARKER_ERROR);
 
   -- LOAD-USE: x10 = x4 + 1 => 42 + 1 = 43
-  when 12 => check_register(43, 10, "Load-Use x10 = x4 + 1");
+  when 12 => check_register(43, 10, "Load-Use x10 = x4 + 1", MARKER_ERROR);
 
   -- LOAD BYTE (signed)
-  when 14 => check_register(-1, 5, "LB (Load -1 signed)");
+  when 14 => check_register(-1, 5, "LB (Load -1 signed)",MARKER_ERROR);
 
   -- LOAD-USE: x11 = x5 + x2 => -1 + 42 = 41
-  when 16 => check_register(41, 11, "Load-Use x11 = x5 + x2");
+  when 16 => check_register(41, 11, "Load-Use x11 = x5 + x2",MARKER_ERROR);
 
   -- LOAD BYTE (unsigned)
-  when 17 => check_register(255, 6, "LBU (Load 255 unsigned)");
+  when 17 => check_register(255, 6, "LBU (Load 255 unsigned)",MARKER_ERROR);
 
   -- LOAD-USE: x12 = x6 - x2 => 255 - 42 = 213
-  when 19 => check_register(213, 12, "Load-Use x12 = x6 - x2");
+  when 19 => check_register(213, 12, "Load-Use x12 = x6 - x2",MARKER_ERROR);
 
   -- LOAD HALFWORD (signed)
-  when 21 => check_register(-1, 7, "LH (Load -1 signed)");
+  when 21 => check_register(-1, 7, "LH (Load -1 signed)",MARKER_ERROR);
 
   -- LOAD-USE: x13 = x7 xor x2 => -1 xor 42 = -43 (0xFFFFFFD5)
-  when 23 => check_register(-43, 13, "Load-Use x13 = x7 xor x2");
+  when 23 => check_register(-43, 13, "Load-Use x13 = x7 xor x2",MARKER_ERROR);
 
   -- LOAD HALFWORD (unsigned)
-  when 24=> check_register(65535, 8, "LHU (Load 65535 unsigned)");
+  when 24=> check_register(65535, 8, "LHU (Load 65535 unsigned)",MARKER_ERROR);
 
   -- LOAD-USE: x14 = x8 and x2 => 65535 and 42 = 42
-  when 26 => check_register(42, 14, "Load-Use x14 = x8 and x2");
+  when 26 => check_register(42, 14, "Load-Use x14 = x8 and x2",MARKER_ERROR);
 
   when others => null;
 end case;

@@ -9,7 +9,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.constant_package.ALL;
 
-entity gen_mux_4t1 is 
+entity gen_mux_fto is 
     generic(
         data_width : integer := DATA_WIDTH_GEN
     );
@@ -23,9 +23,9 @@ entity gen_mux_4t1 is
 
         po_res : out std_logic_vector(data_width - 1 downto 0) := (others => '0')
     );
-end entity gen_mux_4t1;
+end entity gen_mux_fto;
 
-architecture behavior of gen_mux_4t1 is begin
+architecture behavior of gen_mux_fto is begin
     with pi_sel select
         po_res <=
         pi_a when "00",
@@ -34,3 +34,5 @@ architecture behavior of gen_mux_4t1 is begin
         pi_d when "11",
         (others => '0') when others; 
 end architecture behavior;
+
+

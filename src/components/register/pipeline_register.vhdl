@@ -14,11 +14,12 @@ entity pipeline_register is
         data_width : integer := DATA_WIDTH_GEN
     );
     port (
-        pi_clk  : in std_logic := '0';
-        pi_rst  : in std_logic := '0';
-        pi_data : in std_logic_vector(data_width - 1 downto 0) := (others => '0');
-
-        po_data : out std_logic_vector(data_width - 1 downto 0) := (others => '0')
+        pi_clk   : in std_logic := '0';
+        pi_rst   : in std_logic := '0';
+        pi_data  : in std_logic_vector(data_width - 1 downto 0) := (others => '0');
+        pi_flush : in std_logic := '0';
+        pi_enable : in std_logic := '1';
+        po_data  : out std_logic_vector(data_width - 1 downto 0) := (others => '0')
     );
 end entity pipeline_register;
 
@@ -32,7 +33,12 @@ begin
                 s_reg <= (others => '0');
             else 
                 if rising_edge(pi_clk) then
-                    s_reg <= pi_data;
+                    if (pi_enable = '1') then
+                        s_reg <= pi_data;
+                    end if; 
+                    if (pi_flush = '1') then 
+                      s_reg <= (others => '0');
+                    end if;
                 end if; 
             end if;            
     end process;

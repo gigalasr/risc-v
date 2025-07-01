@@ -159,6 +159,7 @@ architecture structure of riubs_bp_lu_only_risc_v is
   signal s_pc_adder_pi_b : std_logic_vector(WORD_WIDTH - 1 downto 0) := (others => '0');
   signal s_stall : std_logic := '0';
 
+
 begin
   s_clk <= pi_clk;
   s_rst <= pi_rst;
@@ -185,10 +186,13 @@ begin
   pc: entity work.pipeline_register 
       generic map(WORD_WIDTH) 
       port map(
-        pi_clk  => s_clk and not s_stall,
+        pi_clk  => s_clk,
         pi_rst  => s_rst,
         pi_data => s_pc_pi_data,
-        po_data => s_pc_po_data
+        po_data => s_pc_po_data,
+        pi_flush => '0',
+        pi_enable => not s_stall
+      
       );
   
 -- Mux for switching between Branch Target or PC Adder 
@@ -215,7 +219,9 @@ pcex_1: entity work.pipeline_register
           pi_clk => s_clk,
           pi_rst => s_rst_flush,
           pi_data => s_pcex_1_pi_data,
-          po_data => s_pcex_1_po_data
+          po_data => s_pcex_1_po_data,
+          pi_flush => s_stall,
+          pi_enable => '1'
         );
 s_pcex_1_pi_data <= s_pc_po_data;
 
@@ -225,7 +231,9 @@ pcex_2: entity work.pipeline_register
           pi_clk => s_clk,
           pi_rst => s_rst_flush,
           pi_data => s_pcex_2_pi_data,
-          po_data => s_pcex_2_po_data
+          po_data => s_pcex_2_po_data,
+          pi_flush => open,
+          pi_enable => '1'
         );
 s_pcex_2_pi_data <= s_pcex_1_po_data;
 
@@ -253,7 +261,9 @@ instr_cache_reg: entity work.pipeline_register
                   pi_clk => s_clk,
                   pi_rst => s_rst_flush,
                   pi_data => s_instr_cache_reg_pi_data,
-                  po_data => s_instr_cache_reg_po_data
+                  po_data => s_instr_cache_reg_po_data,
+                  pi_flush => '0',
+                  pi_enable => not s_stall
                  );
 s_instr_cache_reg_pi_data <= s_instr_cache_po_data;
 
@@ -289,7 +299,8 @@ cwr_1: entity work.control_word_register -- Ex Phase
          pi_rst => s_rst_flush,
          pi_clk => s_clk,
          pi_controlWord => s_cwr_1_pi_controlWord,
-         po_controlWord => s_cwr_1_po_controlWord
+         po_controlWord => s_cwr_1_po_controlWord,
+         pi_flush => s_stall
        );
 
 s_cwr_1_pi_controlWord <= s_dec_po_controlWord;
@@ -299,7 +310,8 @@ cwr_2: entity work.control_word_register -- Mem Phase
          pi_rst => s_rst,
          pi_clk => s_clk,
          pi_controlWord => s_cwr_2_pi_controlWord,
-         po_controlWord => s_cwr_2_po_controlWord
+         po_controlWord => s_cwr_2_po_controlWord,
+         pi_flush => '0'
        );
 
 s_cwr_2_pi_controlWord <= s_cwr_1_po_controlWord;
@@ -309,7 +321,8 @@ cwr_3: entity work.control_word_register -- Wb Phase
          pi_rst => s_rst,
          pi_clk => s_clk,
          pi_controlWord => s_cwr_3_pi_controlWord,
-         po_controlWord => s_cwr_3_po_controlWord
+         po_controlWord => s_cwr_3_po_controlWord,
+         pi_flush => '0'
        );
 
 s_cwr_3_pi_controlWord <= s_cwr_2_po_controlWord;
@@ -322,7 +335,9 @@ idex_reg_1: entity work.pipeline_register
                   pi_clk => s_clk,
                   pi_rst => s_rst_flush,
                   pi_data => s_idex_reg_1_pi_data,
-                  po_data => s_idex_reg_1_po_data
+                  po_data => s_idex_reg_1_po_data,
+                  pi_flush => s_stall,
+                  pi_enable => '1'
                 );
 
 s_idex_reg_1_pi_data <= s_instr_cache_reg_po_data(11 downto 7);
@@ -333,7 +348,9 @@ idex_reg_2: entity work.pipeline_register
                   pi_clk => s_clk,
                   pi_rst => s_rst,
                   pi_data => s_idex_reg_2_pi_data,
-                  po_data => s_idex_reg_2_po_data
+                  po_data => s_idex_reg_2_po_data,
+                  pi_flush => '0',
+                  pi_enable => '1'
                 );
 s_idex_reg_2_pi_data <= s_idex_reg_1_po_data;
 
@@ -344,7 +361,9 @@ idex_reg_3: entity work.pipeline_register
                   pi_clk => s_clk,
                   pi_rst => s_rst,
                   pi_data => s_idex_reg_3_pi_data,
-                  po_data => s_idex_reg_3_po_data
+                  po_data => s_idex_reg_3_po_data,
+                  pi_flush => '0',
+                  pi_enable => '1'
                 );
 s_idex_reg_3_pi_data <= s_idex_reg_2_po_data;
 
@@ -361,6 +380,7 @@ s_stall <= '1'
   and ((s_idex_reg_1_po_data /= "00000") 
   and ((s_idex_reg_1_po_data = s_instr_cache_reg_po_data(19 downto 15)) or (s_idex_reg_1_po_data = s_instr_cache_reg_po_data(24 downto 20))))
   else '0';
+
 
 --
 -- FORWARDING
@@ -396,7 +416,7 @@ s_byp_rs2_mem <= s_ram_po_readdata
 
 -- Selector for choosing direct pipeline or forwarded result
 
-fwd_op1_mux: entity work.gen_mux_4t1
+fwd_op1_mux: entity work.gen_mux_fto
              generic map (WORD_WIDTH)
              port map(
                pi_sel => s_byp_rs1_sel,
@@ -407,7 +427,7 @@ fwd_op1_mux: entity work.gen_mux_4t1
                po_res => s_fwd_op1
              );
 
-fwd_op2_mux: entity work.gen_mux_4t1
+fwd_op2_mux: entity work.gen_mux_fto
              generic map (WORD_WIDTH)
              port map(
                pi_sel => s_byp_rs2_sel,
@@ -427,7 +447,9 @@ idex_op1: entity work.pipeline_register
               pi_clk => s_clk,
               pi_rst => s_rst_flush,
               pi_data => s_idex_op1_pi_data,
-              po_data => s_idex_op1_po_data
+              po_data => s_idex_op1_po_data,
+              pi_flush => s_stall,
+              pi_enable => '1'
            );
 s_idex_op1_pi_data <= s_fwd_op1;
 
@@ -438,7 +460,9 @@ idex_op2: entity work.pipeline_register
               pi_clk => s_clk,
               pi_rst => s_rst_flush,
               pi_data => s_idex_op2_pi_data,
-              po_data => s_idex_op2_po_data
+              po_data => s_idex_op2_po_data,
+              pi_flush => s_stall,
+              pi_enable => '1'
            );
 s_idex_op2_pi_data <= s_fwd_op2;
 
@@ -450,7 +474,9 @@ idex_se: entity work.pipeline_register
             pi_clk => s_clk,
             pi_rst => s_rst_flush,
             pi_data => s_idex_sign_ex_pi_data,
-            po_data => s_idex_sign_ex_po_data
+            po_data => s_idex_sign_ex_po_data,
+            pi_flush => s_stall,
+            pi_enable => '1'
          );
 
 -- Selection of Immediate from Sign Extender based on Opcode
@@ -527,7 +553,9 @@ ex_pcp4_1: entity work.pipeline_register
            pi_clk => s_clk,
            pi_rst => s_rst_flush,
            pi_data => s_ex_pcp4_1_res_pi_data,
-           po_data => s_ex_pcp4_1_res_po_data
+           po_data => s_ex_pcp4_1_res_po_data,
+           pi_flush => '0',
+           pi_enable => '1'
          );
 s_ex_pcp4_1_res_pi_data <= s_ex_pc_add_4_po_sum;
 
@@ -537,7 +565,9 @@ ex_pcp4_2: entity work.pipeline_register
            pi_clk => s_clk,
            pi_rst => s_rst_flush,
            pi_data => s_ex_pcp4_2_res_pi_data,
-           po_data => s_ex_pcp4_2_res_po_data
+           po_data => s_ex_pcp4_2_res_po_data,
+           pi_flush => '0',
+           pi_enable => '1'
          );
 s_ex_pcp4_2_res_pi_data <= s_ex_pcp4_1_res_po_data;
 
@@ -547,7 +577,9 @@ ex_pcp4_3: entity work.pipeline_register
            pi_clk => s_clk,
            pi_rst => s_rst,
            pi_data => s_ex_pcp4_3_res_pi_data,
-           po_data => s_ex_pcp4_3_res_po_data
+           po_data => s_ex_pcp4_3_res_po_data,
+           pi_flush => '0',
+           pi_enable => '1'
          );
 s_ex_pcp4_3_res_pi_data <= s_ex_pcp4_2_res_po_data;
 
@@ -557,7 +589,9 @@ ex_pcp4_4: entity work.pipeline_register
            pi_clk => s_clk,
            pi_rst => s_rst,
            pi_data => s_ex_pcp4_4_res_pi_data,
-           po_data => s_ex_pcp4_4_res_po_data
+           po_data => s_ex_pcp4_4_res_po_data,
+           pi_flush => '0',
+           pi_enable => '1'
          );
 s_ex_pcp4_4_res_pi_data <= s_ex_pcp4_3_res_po_data;
 
@@ -587,7 +621,9 @@ ex_mem_res: entity work.pipeline_register
               pi_clk => s_clk,
               pi_rst => s_rst,
               pi_data => s_ex_mem_res_pi_data,
-              po_data => s_ex_mem_res_po_data
+              po_data => s_ex_mem_res_po_data,
+              pi_flush => '0',
+              pi_enable => '1'
             );
 s_ex_mem_res_pi_data <= s_alu_out;
 
@@ -598,7 +634,9 @@ ex_mem_br: entity work.pipeline_register
              pi_clk => s_clk,
              pi_rst => s_rst,
              pi_data => s_ex_mem_br_pi_data,
-             po_data => s_ex_mem_br_po_data
+             po_data => s_ex_mem_br_po_data,
+             pi_flush => '0',
+             pi_enable => '1'
            );
 s_ex_mem_br_pi_data <= s_ex_br_addr_po_sum;
 
@@ -609,7 +647,9 @@ ex_mem_b_sel: entity work.pipeline_register
                 pi_clk => s_clk,
                 pi_rst => s_rst,
                 pi_data => s_ex_mem_b_sel_pi_data,
-                po_data => s_ex_mem_b_sel_po_data
+                po_data => s_ex_mem_b_sel_po_data,
+                pi_flush => '0',
+                pi_enable => '1'
               );
 
 s_ex_mem_b_sel_pi_data(0) <=s_b_sel; 
@@ -646,7 +686,9 @@ idmem_op2: entity work.pipeline_register
               pi_clk =>  s_clk,
               pi_rst =>  s_rst,
               pi_data => s_idmem_op2_pi_data,
-              po_data => s_idmem_op2_po_data
+              po_data => s_idmem_op2_po_data,
+              pi_flush => '0',
+              pi_enable => '1'
            );
 s_idmem_op2_pi_data <= s_idex_op2_po_data;
 
@@ -659,7 +701,9 @@ mem_wb_res: entity work.pipeline_register
               pi_clk => s_clk,
               pi_rst => s_rst,
               pi_data => s_mem_wb_res_pi_data,
-              po_data => s_mem_wb_res_po_data
+              po_data => s_mem_wb_res_po_data,
+              pi_flush => '0',
+              pi_enable => '1'
             );
 s_mem_wb_res_pi_data <= s_ex_mem_res_po_data;
 
@@ -670,7 +714,9 @@ ram_mem_wb: entity work.pipeline_register
               pi_clk =>  s_clk,
               pi_rst =>  s_rst,
               pi_data => s_ram_mem_wb_pi_data,
-              po_data => s_ram_mem_wb_po_data
+              po_data => s_ram_mem_wb_po_data,
+              pi_flush => '0',
+              pi_enable => '1'
            );
 s_ram_mem_wb_pi_data <= s_ram_po_readdata;
 
@@ -685,7 +731,9 @@ imwb_1: entity work.pipeline_register
           pi_clk => s_clk,
           pi_rst => s_rst,
           pi_data => s_imwb_1_pi_data,
-          po_data => s_imwb_1_po_data
+          po_data => s_imwb_1_po_data,
+          pi_flush => '0',
+          pi_enable => '1'
         );
 
 s_imwb_1_pi_data <= s_idex_sign_ex_po_data;
@@ -696,7 +744,9 @@ imwb_2: entity work.pipeline_register
           pi_clk => s_clk,
           pi_rst => s_rst,
           pi_data => s_imwb_2_pi_data,
-          po_data => s_imwb_2_po_data
+          po_data => s_imwb_2_po_data,
+          pi_flush => '0',
+          pi_enable => '1'
         );
 
 s_imwb_2_pi_data <= s_imwb_1_po_data;

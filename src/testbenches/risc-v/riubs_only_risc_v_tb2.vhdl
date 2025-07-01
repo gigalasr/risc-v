@@ -364,6 +364,7 @@ end process;
       -- Prüflogik für BRANCHES
         --            REPORT "Register " & INTEGER'image(2) &
         --    " enthaelt " & INTEGER'image(to_integer(signed(s_registersOut(2)))) & " cycle: " & INTEGER'image(cycle);
+       
             
         case cycle is
           WHEN 6 => check_register(       9, 1, "ADDI"  );
