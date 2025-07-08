@@ -33,7 +33,9 @@ architecture behavior of alu is
   signal s_res_slt, s_res_sltu                                                : STD_LOGIC_VECTOR(data_width - 1 downto 0) := (others => '0');
   signal s_carry_in, s_carry_out, s_shift_type, s_shift_direction             : STD_LOGIC := '0';
   signal s_alu_op                                                             : STD_LOGIC_VECTOR(op_width   - 1 downto 0) := (others => '0');
-
+  signal s_out                                                                : STD_LOGIC_VECTOR(data_width - 1 downto 0) := (others => '0');
+  
+  
 begin
   XOR1:  entity work.gen_xor generic map (data_width) port map (s_op1, s_op2, s_res_xor);
   OR1:   entity work.gen_or  generic map (data_width) port map (s_op1, s_op2, s_res_or);
@@ -57,7 +59,7 @@ begin
       '0' when others;
 
   with s_alu_op select
-    po_alu_out <= 
+    s_out <= 
       s_res_and when AND_ALU_OP,
       s_res_xor when XOR_ALU_OP,
       s_res_or when OR_ALU_OP,
@@ -70,5 +72,6 @@ begin
       s_res_sltu when SLTU_ALU_OP,
       (others => '0') when others;
 
-      po_zero <= '1' when po_alu_out = (po_alu_out'range => '0') else '0';
+		po_alu_out <= s_out;
+      po_zero <= '1' when s_out = (s_out'range => '0') else '0';
 end architecture behavior;

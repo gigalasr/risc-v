@@ -33,7 +33,7 @@ architecture arc1 of control_word_register is
   signal s_controlWord : controlWord := CONTROL_WORD_INIT;
 begin
   process (pi_clk,pi_rst) begin
-    if (pi_rst) then
+    if (pi_rst = '1') then
       s_controlWord <= CONTROL_WORD_INIT;
     elsif rising_edge (pi_clk) then
       if(pi_flush = '1') then

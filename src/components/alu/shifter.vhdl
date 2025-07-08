@@ -25,7 +25,6 @@ end entity;
 
 architecture behavior of shifter is
     signal s_sham_int : integer range 0 to (2**(integer(log2(real(data_width)))));
-    signal s_sign_fill : std_logic_vector(data_width-1 downto 0);
     signal s_logic_shift : std_logic_vector(data_width-1 downto 0);
     signal s_arith_shift : std_logic_vector(data_width-1 downto 0);
    begin
@@ -45,8 +44,7 @@ architecture behavior of shifter is
             std_logic_vector(shift_right(unsigned(pi_op1), s_sham_int)) when '1',
             (others => '0')                                             when others;
 
-        s_sign_fill <= (others => pi_op1(data_width-1));
-        s_arith_shift <= (s_sign_fill(s_sham_int-1 downto 0) & pi_op1((data_width-1) downto s_sham_int)) 
+        s_arith_shift <= std_logic_vector(shift_right(signed(pi_op1), s_sham_int))
             when (pi_shift_type = '1' and s_sham_int > 0 and s_sham_int < data_width)
             else pi_op1;
 

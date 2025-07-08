@@ -48,9 +48,7 @@ begin
         -- Reset 
         if(pi_rst = '1') then
             s_mem <= (others => (others => '0'));
-        end if;
-
-        if rising_edge(pi_clk) then   
+        elsif rising_edge(pi_clk) then   
             -- Assign Read Ouput 1
             if(toi(pi_readRegAddr1) = 0) then
                 s_read1 <= (others => '0');

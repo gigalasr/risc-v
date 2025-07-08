@@ -50,7 +50,7 @@ begin
     if rising_edge(pi_clk) then
               signExtensionbyte := (others => s_data(to_integer(unsigned(pi_adr(9 downto 0))))(7));
               signExtensionhalf := (others => s_data(to_integer(unsigned(pi_adr(9 downto 0))))(15));
-      if (pi_write) then 
+      if (pi_write = '1') then 
                 case pi_ctrmem is
                     when SB_OP =>
                         s_data(to_integer(unsigned(pi_adr(9 downto 0))))(7 downto 0) <= pi_writedata(7 downto 0);
@@ -63,7 +63,7 @@ begin
                         null;
                 end case;
       end if;
-      if (pi_read) then 
+      if (pi_read = '1') then 
 
                 case pi_ctrmem is
                     when LBU_OP =>
